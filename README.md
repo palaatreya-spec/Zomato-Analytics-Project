@@ -49,7 +49,7 @@ This project simulates a real-world business intelligence case study.
 
 ### Executive Overview
 
-![Executive Overview](Screenshots/executive_overview.png)
+![Executive Overview](Screenshots/executive-overview.png)
 
 ---
 
@@ -123,3 +123,4 @@ Aspiring Data Analyst | SQL | Power BI | Business Intelligence
 ---
 
 ⭐ If you found this project useful, feel free to star the repository.
+
