@@ -55,7 +55,7 @@ This project simulates a real-world business intelligence case study.
 
 ### Business-Performance-Analysis
 
-![Business Performance Analysis](business-performance-analysis.png)
+![Business Performance Analysis](Screenshots/business-performance-analysis.png)
 
 ---
 
@@ -123,5 +123,6 @@ Aspiring Data Analyst | SQL | Power BI | Business Intelligence
 ---
 
 ⭐ If you found this project useful, feel free to star the repository.
+
 
 
