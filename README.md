@@ -205,13 +205,13 @@ SQL File:
 
 ### Zomato Unit Economics Case Study
 
-![Dashboard1](Screenshots/Zomato Unit Economics Case Study.png)
+![Dashboard1](Screenshots/Zomato_Unit_Economics_Case_Study.png)
 
 ---
 
 ### Zomato Profitability Case Study
 
-![Dashboard2](Screenshots/Zomato Profitability Case Study.png)
+![Dashboard2](Screenshots/Zomato_Profitability_Case_Study.png)
 
 ---
 
