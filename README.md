@@ -310,4 +310,4 @@ Skills:
 - SQL
 - Power BI
 - Excel
-- Python
+
