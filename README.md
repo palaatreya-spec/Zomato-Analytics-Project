@@ -311,3 +311,4 @@ Skills:
 - Power BI
 - Excel
 
+LinkedIn: [Aatreya Pal](https://www.linkedin.com/in/aatreya-pal-403ba8237)
