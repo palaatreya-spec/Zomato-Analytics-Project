@@ -1,66 +1,66 @@
-# 🍽️ Zomato Restaurant Analytics — SQL & Power BI Case Study
+# 🍽️ Zomato Restaurant Market & Performance Analytics
 
-> **Portfolio project:** End-to-end restaurant analytics focused on performance, customer value, pricing proxies, operational adoption, and business decision-making.
+> **Portfolio project:** Source-backed analysis of 224K+ restaurants across India using Python, MySQL and Power BI.
 
-**Tools:** MySQL • Power BI • SQL • Data Quality • Business Analytics
+**Tools:** Python • Pandas • MySQL • SQL • Power BI • Data Quality • Business Analytics
 
 ---
 
 ## 🎯 Executive Summary
 
-This project demonstrates how a Data Analyst can take restaurant data through a structured analytical workflow and turn it into business insights.
+This project analyzes a large restaurant-level dataset to understand **market supply, restaurant quality signals, pricing, cuisine mix, and digital-ordering adoption**.
 
-The analysis focuses on:
+The analysis is deliberately source-backed: the uploaded dataset contains restaurant attributes, ratings, rating counts, listed cost-for-two, location, cuisine, online ordering, table reservation and delivery-only indicators. It does **not** contain verified customer-level transactions or order revenue.
 
-- Restaurant and location performance
-- Revenue and order-value metrics
-- Restaurant portfolio segmentation
-- Rating and customer-engagement signals
-- Pricing proxies such as cost-for-two
-- Online-order and table-booking adoption
-- Data-quality and integrity checks
-- Executive Power BI reporting
+### Dataset at a glance
 
-> **Important:** Revenue, order-value, and profitability-style metrics are project-derived analytical measures. They are not Zomato's internal financial figures.
+| Metric | Value |
+|---|---:|
+| Restaurant records | **224,520** |
+| Cities | **83** |
+| Areas | **2,501** |
+| Unique Zomato URLs | **224,520** |
+| Restaurants with usable ratings | **144,735** |
+| Average valid rating | **3.49 / 5** |
+| Online-order adoption | **49.58%** |
+| Table-reservation adoption | **2.95%** |
 
 ---
 
 ## 🧠 Business Questions
 
-The project is organized around questions a restaurant-platform analytics team could investigate:
+1. Which cities have the largest restaurant supply?
+2. Which markets combine scale with stronger ratings and customer-engagement signals?
+3. How does listed cost-for-two vary across cities, cuisines and price bands?
+4. Which cuisines dominate restaurant supply, and how does their quality signal compare?
+5. How widely are online ordering and table reservation adopted?
+6. Which cities show the strongest digital adoption?
+7. Which restaurants combine high ratings with high rating-count engagement?
+8. Where are data-quality issues likely to affect geographic or pricing analysis?
 
-1. Which restaurants and locations contribute the most revenue/order value?
-2. How concentrated is revenue across the restaurant portfolio?
-3. Which restaurant segments combine high volume and high customer value?
-4. How do ratings relate to order activity?
-5. How does listed cost-for-two vary across markets and cuisines?
-6. How widely are online ordering and table booking adopted?
-7. Which locations have a large restaurant base but weaker performance?
-8. Which restaurants should be prioritized for further investigation?
-
-Full question framework: [`Documentation/BUSINESS_QUESTIONS.md`](Documentation/BUSINESS_QUESTIONS.md)
+Full framework: [`Documentation/BUSINESS_QUESTIONS.md`](Documentation/BUSINESS_QUESTIONS.md)
 
 ---
 
 ## 🔄 Analytical Workflow
 
 ```text
-Source Data
-    ↓
-Data Profiling & Quality Checks
-    ↓
-Cleaning & Standardization
-    ↓
-Feature Engineering
-    ↓
-SQL Analytical Views
-    ↓
-Advanced Business Analysis
-    ↓
-KPI / Segmentation Framework
-    ↓
+Raw Zomato Restaurant Data
+          ↓
+Source Profiling
+          ↓
+Data Quality & Validation
+          ↓
+Python Cleaning / Feature Creation
+          ↓
+Clean Source-Backed MySQL Table
+          ↓
+SQL Business Analysis
+          ↓
+KPI & Segmentation Framework
+          ↓
 Power BI Dashboard
-    ↓
+          ↓
 Insights & Recommendations
 ```
 
@@ -68,120 +68,131 @@ Insights & Recommendations
 
 ## 🛠️ Technical Skills Demonstrated
 
+### Python / Pandas
+
+- Source profiling
+- Missing-value analysis
+- Type conversion
+- Rating normalization
+- Numeric parsing
+- Coordinate validation
+- Text standardization
+- Analytical feature creation
+
 ### SQL / MySQL
 
-- Relational schema design
-- Data loading
+- Data modelling
 - Data-quality checks
-- Data cleaning
-- Joins
-- CTEs
-- Subqueries
 - Conditional aggregation
+- CTEs
 - Window functions
-- `RANK`, `ROW_NUMBER`, `LAG`, running totals
-- Revenue concentration / Pareto analysis
-- Portfolio segmentation
-- Analytical views
+- `RANK()` / `NTILE()`
+- Market segmentation
+- Pricing bands
+- Cuisine analysis
+- Digital-adoption analysis
 
 ### Power BI
 
 - KPI reporting
-- Business dashboards
-- City/location analysis
-- Restaurant segmentation
-- Profitability-style analysis
+- Interactive filtering
+- City and market analysis
 - Pricing analysis
-- Interactive business reporting
-
-### Analytics
-
-- KPI definition
-- Data validation
-- Descriptive analysis
-- Segmentation
-- Business interpretation
-- Recommendation framing
+- Rating analysis
+- Digital adoption
+- Restaurant segmentation
 
 ---
 
-## 📊 Dashboard
+## 📊 Dashboard Plan
 
-### Page 1 — Unit Economics Overview
+### Page 1 — Executive Market Overview
 
-Focus areas:
+- Restaurant count
+- Cities / areas covered
+- Average rating
+- Median cost-for-two
+- Online-order adoption
+- Table-reservation adoption
+- Restaurant supply by city
 
-- Platform-level KPIs
-- Revenue by city
-- Margin / profitability-style metrics
-- Revenue vs. performance
+### Page 2 — City & Market Analysis
 
-![Unit Economics Dashboard](Screenshots/Zomato_Unit_Economics_Case_Study.png)
+- City ranking by restaurant supply
+- Rating vs. market scale
+- Cost-for-two comparison
+- Digital adoption by city
+- Engagement signal using rating counts
 
-### Page 2 — Restaurant Performance & Profitability
+### Page 3 — Cuisine & Restaurant Analysis
 
-Focus areas:
+- Top cuisines by restaurant count
+- Cuisine rating comparison
+- Cuisine pricing bands
+- High-rating / high-engagement restaurants
+- Restaurant-level drill-through
 
-- Rating vs performance
-- Pricing vs revenue
-- Reservation availability
-- Delivery-model comparison
-- High-revenue / low-margin investigation
+### Page 4 — Digital & Operating Model
 
-![Profitability Dashboard](Screenshots/Zomato_Profitability_Case_Study.png)
+- Online ordering
+- Table reservation
+- Delivery-only share
+- City comparison
+- Cross-feature adoption
 
----
-
-## 🧮 SQL Analysis Highlights
-
-### 1. Revenue Concentration
-
-Ranks restaurants by revenue and calculates each restaurant's share and cumulative contribution using window functions.
-
-### 2. Portfolio Segmentation
-
-Classifies restaurants into:
-
-- High Volume / High Value
-- High Volume / Low Value
-- Low Volume / High Value
-- Low Volume / Low Value
-
-### 3. Location Performance
-
-Compares restaurant count, order volume, revenue and average order value by location.
-
-### 4. Cuisine Performance
-
-Evaluates restaurant supply, ratings, order volume and revenue by cuisine.
-
-### 5. Rating vs Activity
-
-Compares restaurant performance across rating bands while explicitly treating the relationship as observational rather than causal.
-
-### 6. Digital Adoption
-
-Measures online-order and table-booking adoption by location.
-
-See [`SQL/10_Portfolio_Analysis.sql`](SQL/10_Portfolio_Analysis.sql).
+> Dashboard screenshots will be refreshed after the source-backed Power BI model is rebuilt.
 
 ---
 
-## 🔎 Data Quality
+## 🔎 Data Quality Findings
 
-The project includes checks for:
+The source contains several important analytical-quality issues that are explicitly handled rather than hidden:
 
-- Missing values
-- Invalid ratings
-- Negative transaction amounts
-- Duplicate restaurant candidates
-- Orphaned orders
-- Orphaned order items
-- Invalid review ratings
-- Referential integrity
-- Overall quality status
+- `rating = 0` is treated as unrated rather than a genuine zero-star score.
+- `NEW` / `Nové` ratings are treated as missing.
+- `cost_for_two` requires numeric parsing because values may contain commas.
+- `zomato_url` is a strong source-level unique key.
+- Duplicate restaurant names are not automatically deleted because chain/location repetition can be legitimate.
+- 12,869 coordinate records fall outside the selected India geographic QA bounds and are flagged.
+- `famous_food` is missing for approximately 76.61% of records and should not be treated as complete.
 
-See [`SQL/11_Data_Quality_Report.sql`](SQL/11_Data_Quality_Report.sql).
+See [`Documentation/SOURCE_PROFILE.md`](Documentation/SOURCE_PROFILE.md).
+
+---
+
+## 🧮 Source-Backed SQL Analysis
+
+The new source-backed SQL layer covers:
+
+1. Restaurant supply by city
+2. City quality and engagement
+3. Pricing bands
+4. Rating bands
+5. Digital adoption by city
+6. Cuisine performance
+7. High-rating / high-engagement restaurant prioritization
+
+See [`SQL/13_Source_Backend_Restaurant_Analysis.sql`](SQL/13_Source_Backend_Restaurant_Analysis.sql).
+
+The cleaned MySQL table is defined in [`SQL/14_Source_Backend_Table_Setup.sql`](SQL/14_Source_Backend_Table_Setup.sql).
+
+---
+
+## ⚠️ What this dataset does NOT support
+
+The source dataset does not contain verified order-level revenue or customer transaction history. Therefore the final source-backed analysis does **not** claim:
+
+- Actual Zomato revenue
+- Actual restaurant profit
+- Contribution margin
+- Customer lifetime value
+- Customer retention
+- Basket composition
+- Monthly transaction revenue
+
+Those concepts appeared in the original learning version of the project and are intentionally being removed from the source-backed narrative.
+
+This is an intentional quality improvement: **analytical credibility is more important than adding impressive but unsupported metrics.**
 
 ---
 
@@ -189,9 +200,14 @@ See [`SQL/11_Data_Quality_Report.sql`](SQL/11_Data_Quality_Report.sql).
 
 | Document | Purpose |
 |---|---|
-| [`BUSINESS_QUESTIONS.md`](Documentation/BUSINESS_QUESTIONS.md) | Business questions and decision framework |
-| [`DATA_DICTIONARY.md`](Documentation/DATA_DICTIONARY.md) | Field and metric definitions |
-| [`ASSUMPTIONS_AND_LIMITATIONS.md`](Documentation/ASSUMPTIONS_AND_LIMITATIONS.md) | Analytical assumptions and reproducibility notes |
+| [`SOURCE_PROFILE.md`](Documentation/SOURCE_PROFILE.md) | Verified dataset profile and quality findings |
+| [`SOURCE_TO_SQL_MAPPING.md`](Documentation/SOURCE_TO_SQL_MAPPING.md) | Data lineage and model mapping |
+| [`BUSINESS_QUESTIONS.md`](Documentation/BUSINESS_QUESTIONS.md) | Business questions |
+| [`KPI_DEFINITIONS.md`](Documentation/KPI_DEFINITIONS.md) | KPI definitions and governance |
+| [`DATA_DICTIONARY.md`](Documentation/DATA_DICTIONARY.md) | Field definitions |
+| [`CLEANING_PRINCIPLES.md`](Documentation/CLEANING_PRINCIPLES.md) | Auditable cleaning methodology |
+| [`ASSUMPTIONS_AND_LIMITATIONS.md`](Documentation/ASSUMPTIONS_AND_LIMITATIONS.md) | Analytical limitations |
+| [`REBUILD_PLAN.md`](Documentation/REBUILD_PLAN.md) | Technical rebuild plan |
 
 ---
 
@@ -201,41 +217,26 @@ See [`SQL/11_Data_Quality_Report.sql`](SQL/11_Data_Quality_Report.sql).
 Zomato-Analytics-Project/
 │
 ├── Data/
-│   └── india_all_restaurants_details.csv.zst
+│   ├── india_all_restaurants_details.csv.zst
+│   └── processed/
+│
+├── Python/
+│   ├── 01_source_profile.py
+│   └── 02_clean_restaurant_data.py
 │
 ├── SQL/
-│   ├── 01_Create_Database_And_Table.sql
-│   ├── 02_Data_Loading.sql
-│   ├── 03_Data_Quality_Checks.sql
-│   ├── 04_Data_Cleaning.sql
-│   ├── 05_Feature_Engineering.sql
-│   ├── 06_Analytical_Views.sql
-│   ├── 07_Case_Study_Analysis.sql
-│   ├── 08_Advanced_Business_Queries.sql
-│   ├── 09_Business_Insights.sql
+│   ├── 01–09_original_learning_workflow.sql
 │   ├── 10_Portfolio_Analysis.sql
-│   └── 11_Data_Quality_Report.sql
+│   ├── 11_Data_Quality_Report.sql
+│   ├── 12_Analyst_Quality_Gates.sql
+│   ├── 13_Source_Backend_Restaurant_Analysis.sql
+│   └── 14_Source_Backend_Table_Setup.sql
 │
 ├── PowerBI/
 ├── Screenshots/
-│
 ├── Documentation/
-│   ├── BUSINESS_QUESTIONS.md
-│   ├── DATA_DICTIONARY.md
-│   └── ASSUMPTIONS_AND_LIMITATIONS.md
-│
 └── README.md
 ```
-
----
-
-## ⚠️ Reproducibility Note
-
-The repository contains a compressed restaurant source file. The current SQL workflow also demonstrates a relational model containing restaurants, customers, orders, order items and reviews.
-
-Before claiming the full workflow is reproducible directly from the compressed source, the source file must be decompressed and profiled, then its columns must be explicitly mapped to the SQL model.
-
-This distinction is documented intentionally: **the project prioritizes analytical credibility over unsupported claims.**
 
 ---
 
@@ -247,11 +248,11 @@ The project follows:
 
 Example:
 
-> **Finding:** A group of restaurants has high order volume but below-average order value.
+> **Finding:** A city has a large restaurant base but relatively low online-order adoption.
 >
-> **Interpretation:** Volume alone does not guarantee high customer value.
+> **Interpretation:** Restaurant supply and digital ordering availability are not necessarily aligned.
 >
-> **Action:** Investigate menu mix, pricing and customer segments before prioritizing these restaurants for growth.
+> **Action:** Investigate whether the market represents an opportunity for digital-order enablement, while controlling for restaurant type and dataset coverage.
 
 ---
 
