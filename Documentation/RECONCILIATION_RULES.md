@@ -1,29 +1,30 @@
 # KPI Reconciliation Rules
 
-The final dashboard should use one definition for each headline metric.
+The same KPI must produce the same result across Python, SQL and Power BI, subject only to documented rounding.
 
-## Core reconciliation table
+| KPI | Python | SQL | Power BI |
+|---|---|---|---|
+| Restaurant Count | `nunique(zomato_url)` | `COUNT(DISTINCT zomato_url)` | `DISTINCTCOUNT(zomato_url)` |
+| City Count | `nunique(city)` | `COUNT(DISTINCT city)` | `DISTINCTCOUNT(city)` |
+| Area Count | `nunique(area)` | `COUNT(DISTINCT area)` | `DISTINCTCOUNT(area)` |
+| Rated Restaurants | non-null `rating_clean` | non-null `rating_clean` | non-blank `rating_clean` |
+| Average Rating | mean of valid ratings | `AVG(rating_clean)` | `AVERAGE(rating_clean)` |
+| Online Order Adoption | mean boolean × 100 | `AVG(online_order) × 100` | `[Online Order Restaurants] / [Restaurant Count]` |
+| Reservation Adoption | mean boolean × 100 | `AVG(table_reservation) × 100` | `[Reservation Restaurants] / [Restaurant Count]` |
+| Delivery-only % | mean boolean × 100 | `AVG(delivery_only) × 100` | `[Delivery Only Restaurants] / [Restaurant Count]` |
+| Median Cost | median of positive cleaned cost | validated percentile/median query | `MEDIAN(cost_for_two_clean)` |
 
-| KPI | Python | SQL | Power BI | Expected |
-|---|---|---|---|---|
-| Restaurant Count | `zomato_url.nunique()` | `COUNT(DISTINCT zomato_url)` | `DISTINCTCOUNT(zomato_url)` | Exact match |
-| City Count | `city.nunique()` | `COUNT(DISTINCT city)` | `DISTINCTCOUNT(city)` | Exact match |
-| Area Count | `area.nunique()` | `COUNT(DISTINCT area)` | `DISTINCTCOUNT(area)` | Exact match |
-| Rated Restaurants | non-null `rating_clean` | non-null `rating_clean` URLs | `Rated Restaurants` measure | Exact match |
-| Average Rating | mean valid rating | `AVG(rating_clean)` | `AVERAGE(rating_clean)` | Same rounding |
-| Online Order Adoption | mean boolean | `AVG(online_order)` | adoption measure | Same percentage |
-| Reservation Adoption | mean boolean | `AVG(table_reservation)` | adoption measure | Same percentage |
-| Delivery Only % | mean boolean | `AVG(delivery_only)` | adoption measure | Same percentage |
-| Median Cost | pandas median | use validated median implementation | `MEDIAN()` | Same definition |
+## Reconciliation protocol
 
-## Rules
+1. Run Python on the raw source.
+2. Import the processed output into MySQL.
+3. Run the SQL KPI views.
+4. Connect Power BI to the same cleaned table.
+5. Compare core KPIs using the same filters and grain.
+6. Investigate any mismatch before publishing dashboard screenshots.
 
-1. Do not calculate headline KPIs independently in each tool using different filters.
-2. Document every exclusion, especially unrated restaurants and unusable cost values.
-3. Round only for presentation; retain full precision in calculation layers.
-4. Any discrepancy must be investigated before publishing screenshots or resume claims.
-5. Power BI should connect to the cleaned source-backed table or validated KPI views.
+## Important
 
-## Grain
+Rounding differences are acceptable only when the underlying unrounded values reconcile. Definition differences are not acceptable unless explicitly documented.
 
 The primary grain is **one restaurant per `zomato_url`**. City and cuisine summaries are aggregations from that restaurant-level grain.
