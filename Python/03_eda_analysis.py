@@ -1,15 +1,15 @@
 """Source-backed EDA for the Zomato restaurant dataset.
 
-Outputs compact KPI tables for use in SQL/Power BI validation. The raw source
-is never modified.
+Run from the repository root. The raw source is never modified.
 """
 
 from pathlib import Path
-import pandas as pd
 import numpy as np
+import pandas as pd
 
-SOURCE = Path("../Data/zomato_restaurants.csv")
-OUTPUT = Path("../Data/processed")
+ROOT = Path(__file__).resolve().parents[1]
+SOURCE = ROOT / "Data" / "india_all_restaurants_details.csv"
+OUTPUT = ROOT / "Data" / "processed"
 
 
 def prepare(df: pd.DataFrame) -> pd.DataFrame:
@@ -22,13 +22,12 @@ def prepare(df: pd.DataFrame) -> pd.DataFrame:
         df["cost_for_two"].astype("string").str.replace(",", "", regex=False),
         errors="coerce",
     )
-    df["rating_count"] = pd.to_numeric(df["rating_count"], errors="coerce")
+    df["rating_count_num"] = pd.to_numeric(df["rating_count"], errors="coerce")
     return df
 
 
 def main() -> None:
     df = prepare(pd.read_csv(SOURCE, low_memory=False))
-
     OUTPUT.mkdir(parents=True, exist_ok=True)
 
     dataset_kpis = pd.DataFrame([{
@@ -47,7 +46,7 @@ def main() -> None:
         restaurants=("zomato_url", "nunique"),
         avg_rating=("rating_clean", "mean"),
         median_cost_for_two=("cost_for_two_clean", "median"),
-        rating_count=("rating_count", "sum"),
+        rating_count=("rating_count_num", "sum"),
         online_order_pct=("online_order", "mean"),
         table_reservation_pct=("table_reservation", "mean"),
     ).reset_index()
@@ -61,11 +60,11 @@ def main() -> None:
         restaurants=("zomato_url", "nunique"),
         avg_rating=("rating_clean", "mean"),
         median_cost_for_two=("cost_for_two_clean", "median"),
-        rating_count=("rating_count", "sum"),
+        rating_count=("rating_count_num", "sum"),
     ).reset_index()
     cuisine_kpis.to_csv(OUTPUT / "cuisine_kpis.csv", index=False)
 
-    correlations = df[["rating_clean", "rating_count", "cost_for_two_clean"]].corr()
+    correlations = df[["rating_clean", "rating_count_num", "cost_for_two_clean"]].corr()
     correlations.to_csv(OUTPUT / "numeric_correlations.csv")
 
     print("EDA outputs written to", OUTPUT)
