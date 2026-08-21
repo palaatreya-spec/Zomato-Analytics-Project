@@ -1,14 +1,13 @@
 """Zomato restaurant source profiling.
 
-Run after decompressing the source CSV. The script produces a concise
-profiling report without modifying the source data.
+Profiles the decompressed CSV without modifying the raw source.
 """
 
 from pathlib import Path
 import pandas as pd
 
-SOURCE = Path("../Data/india_all_restaurants_details.csv")
-OUTPUT = Path("../Documentation/source_profile_generated.csv")
+SOURCE = Path(__file__).resolve().parents[1] / "Data" / "india_all_restaurants_details.csv"
+OUTPUT = Path(__file__).resolve().parents[1] / "Data" / "processed" / "source_profile_generated.csv"
 
 
 def main() -> None:
