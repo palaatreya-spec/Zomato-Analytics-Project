@@ -1,4 +1,5 @@
 -- Analytical Views for Zomato Analytics Project
+-- QA fix: corrected the review_summary GROUP BY alias.
 
 -- View for Restaurant Performance
 CREATE VIEW restaurant_performance AS
@@ -51,7 +52,7 @@ GROUP BY o.order_id, o.order_date, c.name, r.name, r.location, r.cuisine, o.tota
 -- View for Review Summary
 CREATE VIEW review_summary AS
 SELECT
-    r.restaurant_id,
+    res.restaurant_id,
     res.name AS restaurant_name,
     COUNT(rv.review_id) AS review_count,
     AVG(rv.rating) AS avg_review_rating,
@@ -59,7 +60,7 @@ SELECT
     MAX(rv.rating) AS max_rating
 FROM reviews rv
 JOIN restaurants res ON rv.restaurant_id = res.restaurant_id
-GROUP BY r.restaurant_id, res.name;
+GROUP BY res.restaurant_id, res.name;
 
 -- View for Monthly Sales
 CREATE VIEW monthly_sales AS
