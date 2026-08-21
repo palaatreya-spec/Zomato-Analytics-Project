@@ -1,15 +1,14 @@
 """Create a source-backed cleaned restaurant dataset.
 
-The raw source is never overwritten. Cleaning rules are explicit and
-focused on analytical usability rather than deleting legitimate records.
+Run from the repository root. The raw source is never overwritten.
 """
 
 from pathlib import Path
-import numpy as np
 import pandas as pd
 
-SOURCE = Path("../Data/india_all_restaurants_details.csv")
-OUTPUT = Path("../Data/processed/zomato_restaurants_clean.csv")
+ROOT = Path(__file__).resolve().parents[1]
+SOURCE = ROOT / "Data" / "india_all_restaurants_details.csv"
+OUTPUT = ROOT / "Data" / "processed" / "zomato_restaurants_clean.csv"
 
 
 def parse_rating(series: pd.Series) -> pd.Series:
@@ -33,28 +32,22 @@ def parse_coordinates(series: pd.Series) -> pd.DataFrame:
 def main() -> None:
     df = pd.read_csv(SOURCE, low_memory=False)
 
-    # Remove export-only index columns; retain the source sequence number for lineage.
     if "Unnamed: 0" in df.columns:
         df = df.drop(columns=["Unnamed: 0"])
 
-    # Preserve source columns while creating analytical fields.
     df["rating_clean"] = parse_rating(df["rating"])
     df["cost_for_two_clean"] = parse_cost(df["cost_for_two"])
 
     coords = parse_coordinates(df["coordinates"])
     df = pd.concat([df, coords], axis=1)
-
-    # India bounding-box flag for geographic QA; do not delete invalid rows.
     df["coordinate_valid"] = (
         df["latitude"].between(6, 38)
         & df["longitude"].between(68, 98)
     )
 
-    # Standardized text fields.
     for column in ["name", "city", "area", "cusine"]:
         df[f"{column}_clean"] = df[column].astype("string").str.strip()
 
-    # Missing-value flags are useful for QA and Power BI.
     df["has_rating"] = df["rating_clean"].notna()
     df["has_cost"] = df["cost_for_two_clean"].notna() & (df["cost_for_two_clean"] > 0)
     df["has_famous_food"] = df["famous_food"].notna()
