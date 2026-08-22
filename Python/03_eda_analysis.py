@@ -1,73 +1,60 @@
-"""Source-backed EDA for the Zomato restaurant dataset.
+"""Basic exploratory analysis for the Zomato restaurant dataset.
 
-Run from the repository root. The raw source is never modified.
+Creates simple CSV outputs that can be used for SQL checks or Power BI.
 """
 
 from pathlib import Path
-import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "Data" / "india_all_restaurants_details.csv"
+SOURCE = ROOT / "Data" / "processed" / "zomato_restaurants_clean.csv"
 OUTPUT = ROOT / "Data" / "processed"
 
 
-def prepare(df: pd.DataFrame) -> pd.DataFrame:
-    df = df.copy()
-    df["rating_clean"] = pd.to_numeric(
-        df["rating"].replace({"NEW": np.nan, "Nové": np.nan}), errors="coerce"
-    )
-    df.loc[df["rating_clean"] == 0, "rating_clean"] = np.nan
-    df["cost_for_two_clean"] = pd.to_numeric(
-        df["cost_for_two"].astype("string").str.replace(",", "", regex=False),
-        errors="coerce",
-    )
-    df["rating_count_num"] = pd.to_numeric(df["rating_count"], errors="coerce")
-    return df
-
-
 def main() -> None:
-    df = prepare(pd.read_csv(SOURCE, low_memory=False))
+    df = pd.read_csv(SOURCE, low_memory=False)
     OUTPUT.mkdir(parents=True, exist_ok=True)
 
+    # Overall dataset summary
     dataset_kpis = pd.DataFrame([{
         "restaurants": df["zomato_url"].nunique(),
-        "cities": df["city"].nunique(),
-        "areas": df["area"].nunique(),
-        "rated_restaurants": int(df["rating_clean"].notna().sum()),
-        "avg_rating": round(df["rating_clean"].mean(), 3),
-        "median_cost_for_two": df.loc[df["cost_for_two_clean"] > 0, "cost_for_two_clean"].median(),
+        "cities": df["city_clean"].nunique(),
+        "rated_restaurants": int(df["has_rating"].sum()),
+        "avg_rating": round(df["rating_clean"].mean(), 2),
+        "avg_cost_for_two": round(
+            df.loc[df["cost_for_two_clean"] > 0, "cost_for_two_clean"].mean(), 2
+        ),
         "online_order_pct": round(df["online_order"].mean() * 100, 2),
         "table_reservation_pct": round(df["table_reservation"].mean() * 100, 2),
     }])
     dataset_kpis.to_csv(OUTPUT / "dataset_kpis.csv", index=False)
 
-    city = df.groupby("city").agg(
+    # City-level summary
+    city_kpis = df.groupby("city_clean").agg(
         restaurants=("zomato_url", "nunique"),
         avg_rating=("rating_clean", "mean"),
-        median_cost_for_two=("cost_for_two_clean", "median"),
-        rating_count=("rating_count_num", "sum"),
+        avg_cost_for_two=("cost_for_two_clean", "mean"),
+        rating_count=("rating_count", "sum"),
         online_order_pct=("online_order", "mean"),
-        table_reservation_pct=("table_reservation", "mean"),
     ).reset_index()
-    city["online_order_pct"] *= 100
-    city["table_reservation_pct"] *= 100
-    city.to_csv(OUTPUT / "city_kpis.csv", index=False)
+    city_kpis["avg_rating"] = city_kpis["avg_rating"].round(2)
+    city_kpis["avg_cost_for_two"] = city_kpis["avg_cost_for_two"].round(2)
+    city_kpis["online_order_pct"] = (city_kpis["online_order_pct"] * 100).round(2)
+    city_kpis.to_csv(OUTPUT / "city_kpis.csv", index=False)
 
-    cuisine = df.assign(cuisine=df["cusine"].astype("string").str.split(",")).explode("cuisine")
-    cuisine["cuisine"] = cuisine["cuisine"].str.strip()
-    cuisine_kpis = cuisine.groupby("cuisine").agg(
+    # Simple cuisine summary
+    cuisine_kpis = df.groupby("cusine_clean").agg(
         restaurants=("zomato_url", "nunique"),
         avg_rating=("rating_clean", "mean"),
-        median_cost_for_two=("cost_for_two_clean", "median"),
-        rating_count=("rating_count_num", "sum"),
+        avg_cost_for_two=("cost_for_two_clean", "mean"),
     ).reset_index()
+    cuisine_kpis["avg_rating"] = cuisine_kpis["avg_rating"].round(2)
+    cuisine_kpis["avg_cost_for_two"] = cuisine_kpis["avg_cost_for_two"].round(2)
     cuisine_kpis.to_csv(OUTPUT / "cuisine_kpis.csv", index=False)
 
-    correlations = df[["rating_clean", "rating_count_num", "cost_for_two_clean"]].corr()
-    correlations.to_csv(OUTPUT / "numeric_correlations.csv")
-
-    print("EDA outputs written to", OUTPUT)
+    print(f"Restaurants: {df['zomato_url'].nunique():,}")
+    print(f"Cities: {df['city_clean'].nunique():,}")
+    print("EDA outputs written to Data/processed/")
 
 
 if __name__ == "__main__":
