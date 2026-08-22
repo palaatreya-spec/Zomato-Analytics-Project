@@ -1,37 +1,36 @@
 -- Zomato Restaurant Analytics — Source-backed analysis
--- These queries use fields available in the uploaded restaurant source after
--- the Python cleaning pipeline creates the cleaned table.
--- Rename table/columns as needed when importing the processed CSV into MySQL.
+-- Beginner-to-intermediate Data Analyst SQL.
+-- These queries use only fields available in the cleaned restaurant-level table.
 
 USE zomato_analytics;
 
--- 1. Restaurant supply by city
+-- 1. Restaurant supply and average metrics by city
 SELECT
-    city_clean AS city,
+    city,
     COUNT(DISTINCT zomato_url) AS restaurant_count,
     ROUND(AVG(rating_clean), 2) AS avg_rating,
     ROUND(AVG(cost_for_two_clean), 2) AS avg_cost_for_two,
     ROUND(100 * AVG(online_order), 2) AS online_order_adoption_pct,
     ROUND(100 * AVG(table_reservation), 2) AS table_reservation_adoption_pct
 FROM zomato_restaurants_clean
-GROUP BY city_clean
+GROUP BY city
 ORDER BY restaurant_count DESC;
 
--- 2. City performance among cities with meaningful restaurant coverage
+-- 2. City comparison for cities with at least 100 restaurants
 SELECT
-    city_clean AS city,
+    city,
     COUNT(DISTINCT zomato_url) AS restaurant_count,
     ROUND(AVG(rating_clean), 2) AS avg_rating,
     ROUND(AVG(cost_for_two_clean), 2) AS avg_cost_for_two,
     SUM(rating_count) AS total_rating_count
 FROM zomato_restaurants_clean
-GROUP BY city_clean
+GROUP BY city
 HAVING COUNT(DISTINCT zomato_url) >= 100
 ORDER BY total_rating_count DESC;
 
 -- 3. Pricing bands by city
 SELECT
-    city_clean AS city,
+    city,
     CASE
         WHEN cost_for_two_clean <= 200 THEN 'Budget (<=200)'
         WHEN cost_for_two_clean <= 500 THEN 'Mid (201-500)'
@@ -42,7 +41,7 @@ SELECT
     ROUND(AVG(rating_clean), 2) AS avg_rating
 FROM zomato_restaurants_clean
 WHERE cost_for_two_clean > 0
-GROUP BY city_clean, price_band
+GROUP BY city, price_band
 ORDER BY city, restaurant_count DESC;
 
 -- 4. Rating-band analysis
@@ -62,55 +61,31 @@ WHERE rating_clean IS NOT NULL
 GROUP BY rating_band
 ORDER BY rating_band;
 
--- 5. Digital adoption by city
+-- 5. Online ordering and table reservation by city
 SELECT
-    city_clean AS city,
+    city,
     COUNT(*) AS restaurant_count,
     SUM(online_order) AS online_order_count,
     ROUND(100 * AVG(online_order), 2) AS online_order_adoption_pct,
     SUM(table_reservation) AS reservation_count,
-    ROUND(100 * AVG(table_reservation), 2) AS reservation_adoption_pct,
-    SUM(delivery_only) AS delivery_only_count,
-    ROUND(100 * AVG(delivery_only), 2) AS delivery_only_pct
+    ROUND(100 * AVG(table_reservation), 2) AS reservation_adoption_pct
 FROM zomato_restaurants_clean
-GROUP BY city_clean
+GROUP BY city
 HAVING COUNT(*) >= 100
 ORDER BY restaurant_count DESC;
 
--- 6. Cuisine performance (top cuisines by restaurant supply)
+-- 6. Cuisine analysis by restaurant supply
 SELECT
-    cusine_clean AS cuisine,
+    cuisine,
     COUNT(*) AS restaurant_count,
     ROUND(AVG(rating_clean), 2) AS avg_rating,
     ROUND(AVG(cost_for_two_clean), 2) AS avg_cost_for_two,
     ROUND(AVG(rating_count), 1) AS avg_rating_count
 FROM zomato_restaurants_clean
-WHERE cusine_clean IS NOT NULL
-GROUP BY cusine_clean
+WHERE cuisine IS NOT NULL
+GROUP BY cuisine
 HAVING COUNT(*) >= 100
 ORDER BY restaurant_count DESC;
 
--- 7. Restaurant prioritization: high rating + high engagement signal
-WITH scored AS (
-    SELECT
-        zomato_url,
-        name_clean AS restaurant_name,
-        city_clean AS city,
-        rating_clean,
-        rating_count,
-        cost_for_two_clean,
-        NTILE(4) OVER (ORDER BY rating_count DESC) AS engagement_quartile,
-        NTILE(4) OVER (ORDER BY rating_clean DESC) AS rating_quartile
-    FROM zomato_restaurants_clean
-    WHERE rating_clean IS NOT NULL
-)
-SELECT *
-FROM scored
-WHERE engagement_quartile = 1
-  AND rating_quartile = 1
-ORDER BY rating_count DESC, rating_clean DESC
-LIMIT 100;
-
--- 8. Revenue concentration is intentionally NOT calculated here.
--- The source does not contain order-level revenue. Cost-for-two is a listed
--- pricing proxy and must not be presented as revenue.
+-- Note: The source does not contain order-level revenue or customer data.
+-- Cost-for-two is a pricing field and must not be presented as revenue.
