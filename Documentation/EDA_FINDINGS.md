@@ -1,39 +1,35 @@
-# EDA Findings — Source-Backed Dataset
+# EDA Findings — Zomato Restaurant Analytics
 
-The uploaded restaurant dataset contains 224,520 records. The following findings were calculated directly from the uploaded CSV after normalizing ratings and cost-for-two.
+This document records the main exploratory questions and observations from the cleaned restaurant dataset.
 
-## 1. Rating and engagement
+The final numerical values should be refreshed from the current Python outputs before being presented as portfolio headline figures.
 
-The correlation between valid restaurant rating and rating count is approximately **0.392**, indicating a moderate positive association. Higher-rated restaurants tend to have more rating activity in this dataset, but this is observational and does not imply that ratings cause engagement.
+## Main areas explored
 
-## 2. Pricing and quality
+### 1. Restaurant supply
 
-The correlation between valid rating and cost-for-two is approximately **0.269**, a weak-to-moderate positive association. Higher listed price is therefore associated with somewhat higher ratings, but price alone is not a reliable predictor of restaurant quality.
+Restaurant counts can be compared across cities to identify markets with larger restaurant presence.
 
-## 3. Engagement and pricing
+### 2. Ratings
 
-The correlation between rating count and cost-for-two is approximately **0.287**. More expensive restaurants tend to have somewhat more rating activity, but the relationship is not strong enough to treat price as an engagement driver.
+Average restaurant ratings can be compared across cities, rating bands and cuisine categories. Placeholder values such as `0`, `NEW` and `Nové` are excluded from valid-rating calculations.
 
-## 4. Largest markets
+### 3. Pricing
 
-The largest city groups are Delhi NCR, Mumbai, Bengaluru, Pune and Hyderabad. Delhi NCR contains the largest restaurant supply in the source.
+Listed cost-for-two can be used to compare price levels and simple price bands. It is a pricing field, not revenue.
 
-## 5. City-level signals
+### 4. Digital adoption
 
-Among the largest markets, Bengaluru has the highest average valid rating at approximately **3.61**, while Delhi NCR and Mumbai are both around **3.51**. Chandigarh has the highest online-order adoption among the top 10 cities at approximately **60.7%**.
+Online-order and table-reservation fields can be summarized by city to understand how widely these options are listed across restaurants.
 
-## 6. Cuisine mix
+### 5. Cuisine mix
 
-North Indian, Chinese and Fast Food are the largest cuisine categories by restaurant presence. Desserts and Beverages show relatively stronger average ratings among major cuisine categories, while Mughlai has a higher median listed cost-for-two.
+Cuisine categories can be grouped by restaurant count, average rating and average listed cost-for-two to compare supply and basic quality/pricing signals.
 
-## 7. Analytical caution
+## Analytical caution
 
-These are descriptive relationships from a cross-sectional restaurant dataset. They should not be presented as causal effects. The source has no order-level revenue, customer history or experiment design.
+These findings are descriptive. Relationships in the dataset should not be presented as causal effects, and the source does not support customer, transaction, revenue or profitability analysis.
 
-## Recommended business questions
+## Next validation step
 
-- Which cities combine market scale with strong quality and digital adoption?
-- Which cuisine categories have high supply but weaker ratings?
-- Does digital-order availability vary systematically by market type?
-- Which high-engagement restaurants sit in lower price bands?
-- Which markets have unusually high pricing but weaker quality signals?
+Before adding specific figures to the README, resume or interview story, verify them from the current cleaned dataset and make sure Python, SQL and Power BI use the same definitions.
