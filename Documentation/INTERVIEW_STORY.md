@@ -2,34 +2,40 @@
 
 ## 30-second version
 
-I analyzed a 224K+ restaurant dataset using Python, SQL and Power BI. I first profiled the source and found issues such as placeholder ratings, mixed-format pricing and invalid geographic coordinates. I built a reproducible cleaning layer, standardized the analytical fields, then used SQL and Python to study city supply, ratings, pricing, cuisine mix and digital-order adoption. I also created a transparent performance score combining quality, engagement and digital availability, and designed a Power BI model around source-backed KPIs.
+I analyzed a restaurant-level dataset using Python, MySQL and Power BI. I first profiled the data and found issues such as placeholder ratings, mixed-format pricing and some invalid coordinates. I cleaned the important fields using Pandas, created a cleaned dataset, and then used basic SQL analysis to study restaurant supply, ratings, pricing, cuisine mix and online-order adoption. Finally, I used the resulting KPIs and analysis to build a Power BI dashboard.
 
 ## Why did you not calculate revenue?
 
-The source contains restaurant attributes but no verified order-level transaction revenue. Rather than fabricate revenue or profitability metrics, I explicitly removed those claims from the source-backed analysis and used listed cost-for-two as a pricing proxy.
+The dataset does not contain verified order-level transaction data or revenue. So I did not make revenue or profit claims. I used the available cost-for-two field as a pricing measure instead.
 
-## Why is rating count used as engagement?
+## Why did you clean ratings such as `0`, `NEW` and `Nové`?
 
-Rating count is an observable source field and can act as a descriptive proxy for customer engagement or visibility. It is not equivalent to orders, customers or revenue, so I interpret it cautiously.
+These values do not represent a normal 1–5 restaurant rating. Treating them as real ratings would reduce the accuracy of average-rating calculations, so I converted them to missing values before analysis.
 
-## Why use percentiles in the performance score?
+## What did you use Python for?
 
-Restaurant rating and rating count operate on different scales. Percentile transformation puts them on a comparable relative scale. A log transformation is applied to rating count first so extreme engagement values have less influence.
+I used Pandas for source profiling, data cleaning, basic data-quality checks and exploratory summaries. Python was mainly the data-preparation step before SQL and Power BI analysis.
 
-## What was the biggest data-quality issue?
+## What did you use SQL for?
 
-Ratings contain numeric scores as well as `0`, `NEW`, and `Nové`. Treating those values as genuine ratings would distort averages, so they are normalized to missing before quality analysis.
+I used MySQL to validate the cleaned data and answer business questions such as restaurant count by city, average rating, pricing bands, cuisine analysis and online-order adoption.
+
+## Why use SQL after Python?
+
+Python was useful for cleaning and preparing the dataset. SQL was then useful for grouping, filtering and comparing the cleaned data from a business-analysis perspective. This also gave me practice using the same dataset with different analyst tools.
 
 ## What business decision can this support?
 
-The analysis can help identify markets and restaurant segments with stronger quality, engagement and digital availability, which can inform where to investigate growth opportunities or operational gaps. It is descriptive rather than causal.
+The analysis can help compare restaurant markets by supply, ratings, pricing and digital-ordering availability. These are descriptive findings from the dataset and would need additional business data before making a major commercial decision.
 
 ## Key technical skills demonstrated
 
-- Python/Pandas data profiling and transformation
-- MySQL data modelling and QA
-- CTEs and window functions
-- Percentile-based segmentation
-- KPI design and metric governance
-- Power BI semantic modelling and DAX
-- Business interpretation and limitations
+- Python/Pandas data cleaning and basic EDA
+- MySQL and practical SQL analysis
+- Data-quality checks
+- KPI calculations
+- Power BI dashboarding
+- Business interpretation
+- Understanding of dataset limitations
+
+> **Interview rule:** Every technique used in this project is intentionally kept at a level that I can explain and demonstrate as a fresher Data Analyst.
