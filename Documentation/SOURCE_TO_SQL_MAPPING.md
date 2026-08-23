@@ -1,52 +1,64 @@
 # Source-to-SQL Mapping
 
-## Why this document exists
+## Purpose
 
-A portfolio analytics project should make the lineage between source fields and analytical metrics explicit. The repository currently contains a compressed restaurant source file, while the SQL schema defines a broader transactional model.
+This document shows how the cleaned restaurant dataset flows from Python into MySQL.
 
-## Current source artifact
+## Source dataset
 
 `Data/india_all_restaurants_details.csv.zst`
 
-The compressed file is stored in GitHub, but its binary contents cannot be decoded through the repository text interface. Therefore the exact source columns are **not guessed here**.
+The compressed source is decompressed locally before the Python pipeline is run.
 
-## Current SQL model
+## Transformation flow
 
-The SQL schema currently defines:
+```text
+Raw source columns
+      ↓
+Python / Pandas cleaning
+      ↓
+zomato_restaurants_clean.csv
+      ↓
+MySQL: zomato_restaurants_clean
+      ↓
+SQL analysis and KPIs
+```
 
-- `restaurants`
-- `customers`
-- `orders`
-- `order_items`
-- `reviews`
+## Main field mapping
 
-The schema is explicitly defined in `SQL/01_Create_Database_And_Table.sql`, and the loading script expects five corresponding CSV files. fileciteturn68file0L2-L6 fileciteturn69file0L2-L6
+| Source field | Cleaned field | SQL field | Transformation |
+|---|---|---|---|
+| `zomato_url` | `zomato_url` | `zomato_url` | Used as restaurant-level identifier |
+| `name` | `name` | `name` | Trim whitespace |
+| `city` | `city` | `city` | Trim whitespace |
+| `area` | `area` | `area` | Trim whitespace |
+| `cusine` | `cuisine` | `cuisine` | Rename + trim whitespace |
+| `rating` | `rating_clean` | `rating_clean` | Convert to numeric; placeholders become missing |
+| `rating_count` | `rating_count` | `rating_count` | Remove comma formatting + numeric conversion |
+| `cost_for_two` | `cost_for_two_clean` | `cost_for_two_clean` | Remove comma formatting + numeric conversion |
+| `online_order` | `online_order` | `online_order` | `Yes/No → 1/0` |
+| `table_reservation` | `table_reservation` | `table_reservation` | `Yes/No → 1/0` |
+| `coordinates` | `latitude`, `longitude` | `latitude`, `longitude` | Split into two numeric fields |
 
-## Mapping status
+## Quality fields created in Python
 
-| Analytical entity | Source mapping | Status |
-|---|---|---|
-| Restaurants | Compressed restaurant dataset | **Needs profiling** |
-| Customers | No verified source file | **Unverified** |
-| Orders | No verified source file | **Unverified** |
-| Order items | No verified source file | **Unverified** |
-| Reviews | No verified source file | **Unverified** |
+| Cleaned field | Purpose |
+|---|---|
+| `has_rating` | Identifies rows with a usable rating |
+| `has_cost` | Identifies rows with a positive numeric cost |
+| `coordinate_valid` | Basic geographic validity check |
 
-## Rule for the final portfolio version
+## Analytical scope
 
-Only source-backed fields should be used for final findings. If customer/order/review data are intentionally retained as a separate demonstration dataset, they must be explicitly labelled as an extended/synthetic relational layer rather than implied to come from the compressed restaurant source.
+The SQL layer uses the cleaned restaurant table for:
 
-## Required next step
+- restaurant counts
+- city analysis
+- rating analysis
+- pricing analysis
+- cuisine analysis
+- online-order adoption
+- table-reservation adoption
+- basic data-quality checks
 
-Profile the compressed source locally and record:
-
-- row count
-- exact column names
-- inferred data types
-- null percentage
-- duplicate count
-- unique counts for identifiers/categories
-- numeric ranges
-- representative categorical values
-
-Then replace this mapping table with the verified source-to-model mapping.
+No customer, order, revenue, profit or retention model is created because those fields are not present in the source dataset.
