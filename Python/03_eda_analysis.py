@@ -12,12 +12,9 @@ def main() -> None:
     df = pd.read_csv(SOURCE, low_memory=False)
     OUTPUT.mkdir(parents=True, exist_ok=True)
 
-    city = "city_clean"
-    cuisine = "cusine_clean"
-
     dataset_kpis = pd.DataFrame([{
         "restaurants": df["zomato_url"].nunique(),
-        "cities": df[city].nunique(),
+        "cities": df["city"].nunique(),
         "rated_restaurants": int(df["has_rating"].sum()),
         "avg_rating": round(df["rating_clean"].mean(), 2),
         "avg_cost_for_two": round(
@@ -28,7 +25,7 @@ def main() -> None:
     }])
     dataset_kpis.to_csv(OUTPUT / "dataset_kpis.csv", index=False)
 
-    city_kpis = df.groupby(city).agg(
+    city_kpis = df.groupby("city").agg(
         restaurants=("zomato_url", "nunique"),
         avg_rating=("rating_clean", "mean"),
         avg_cost_for_two=("cost_for_two_clean", "mean"),
@@ -40,7 +37,7 @@ def main() -> None:
     city_kpis["online_order_pct"] = (city_kpis["online_order_pct"] * 100).round(2)
     city_kpis.to_csv(OUTPUT / "city_kpis.csv", index=False)
 
-    cuisine_kpis = df.groupby(cuisine).agg(
+    cuisine_kpis = df.groupby("cuisine").agg(
         restaurants=("zomato_url", "nunique"),
         avg_rating=("rating_clean", "mean"),
         avg_cost_for_two=("cost_for_two_clean", "mean"),
@@ -50,7 +47,7 @@ def main() -> None:
     cuisine_kpis.to_csv(OUTPUT / "cuisine_kpis.csv", index=False)
 
     print(f"Restaurants: {df['zomato_url'].nunique():,}")
-    print(f"Cities: {df[city].nunique():,}")
+    print(f"Cities: {df['city'].nunique():,}")
     print("EDA outputs written to Data/processed/")
 
 
