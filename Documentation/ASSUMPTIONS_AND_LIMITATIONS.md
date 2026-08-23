@@ -2,33 +2,38 @@
 
 ## Analytical assumptions
 
-1. Metrics are project-level analytical outputs and must not be presented as Zomato's internal financial reporting.
-2. Restaurant `rating` and review-level ratings are separate concepts; review-level averages are used only where explicitly defined.
-3. Relationships between rating, ordering activity, pricing, reservations, or operating model are observational and do not establish causation.
-4. `cost_for_two` is treated as a listed pricing proxy, not realized customer spend.
-5. Restaurant comparisons should account for differences in location, cuisine mix, data coverage, and observation counts.
-6. Missing, invalid, duplicate, and referential-integrity issues should be measured before transformation; cleaning rules are documented in the SQL layer.
-7. Any profitability, contribution-margin, or revenue-estimation metric that is not directly present in the source data must be labelled as a derived assumption and accompanied by its formula.
+1. The analysis describes the project dataset and is not Zomato's internal business or financial reporting.
+2. `rating_clean` represents the restaurant rating field after removing placeholder values; it is not a customer-review-level metric.
+3. `cost_for_two_clean` is treated as a listed pricing measure, not realized revenue or customer spend.
+4. `online_order` and `table_reservation` indicate whether the option is listed for a restaurant; they do not represent completed orders or bookings.
+5. Differences between cities or cuisines are descriptive observations and do not prove causation.
+6. Missing and invalid values are handled through explicit cleaning rules rather than being silently treated as valid observations.
+7. Restaurant-level comparisons should consider differences in city, cuisine mix and data availability.
 
-## Source-data limitation
+## Statistical interpretation
 
-The repository contains a compressed restaurant source dataset at `Data/india_all_restaurants_details.csv.zst`. The GitHub connector can identify the file and its blob, but the compressed binary cannot be safely decoded through the repository text interface. Therefore, the source schema must be profiled locally before replacing the current relational SQL model with source-specific tables.
+- Mean and median are used as simple measures of central tendency.
+- Standard deviation is used as a basic measure of spread.
+- Pearson correlation is used only to describe linear association between selected numeric fields.
+- Correlation does not imply causation.
+- The project does not perform predictive modelling or machine learning.
 
-## Relational-model limitation
+## Source-data limitations
 
-The SQL workflow currently demonstrates a relational analytics model containing restaurants, customers, orders, order items, and reviews. The base table definitions and loading scripts require those corresponding source files. The workflow should not be described as a reproducible transformation of the compressed restaurant dataset until those relationships are actually available or explicitly simulated.
+The dataset is restaurant-level and does not provide verified customer-level transactions, order-level revenue, profit, retention or customer lifetime value.
 
-## Reproducibility rule
+Therefore, these metrics are outside the project scope.
 
-Before making source-specific changes:
+## Reproducibility
 
-1. Decompress the `.zst` file.
-2. Record the exact column names, data types, row count, null rates, duplicate rate, and representative values.
-3. Map source columns to the analytical model.
-4. Document any assumptions required for derived metrics.
-5. Run data-quality checks before cleaning.
-6. Re-run the downstream SQL/Power BI outputs after the model is aligned.
+1. Decompress the `.zst` source file locally.
+2. Place the CSV in the `Data/` folder.
+3. Run `Python/run_pipeline.py`.
+4. Review the generated files in `Data/processed/`.
+5. Load the cleaned CSV into MySQL using `SQL/01_Table_Setup.sql`.
+6. Run the SQL quality checks and analysis scripts.
+7. Use the same definitions when building the Power BI dashboard.
 
 ## Interpretation guidance
 
-The project demonstrates an end-to-end analytics workflow: source profiling, validation, cleaning, SQL transformation, business analysis, and BI reporting. Findings should be presented as analysis of the project dataset, not as official Zomato business performance.
+Findings should be presented as analysis of the project dataset. They should not be described as official Zomato business performance or as causal business conclusions.
