@@ -46,6 +46,7 @@ def main() -> None:
     # Source fields are boolean in the current dataset. Convert them to 1/0.
     df["online_order"] = df["online_order"].astype("boolean").astype("Int64")
     df["table_reservation"] = df["table_reservation"].astype("boolean").astype("Int64")
+    df["delivery_only"] = df["delivery_only"].astype("boolean").astype("Int64")
 
     # Basic data-quality flags.
     df["has_rating"] = df["rating_clean"].notna()
