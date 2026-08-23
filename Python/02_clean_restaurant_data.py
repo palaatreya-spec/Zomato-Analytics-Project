@@ -37,7 +37,7 @@ def main() -> None:
     df["latitude"] = pd.to_numeric(coordinates[0].str.strip(), errors="coerce")
     df["longitude"] = pd.to_numeric(coordinates[1].str.strip(), errors="coerce")
 
-    # Create clean analyst-friendly city and cuisine columns.
+    # Create clean analyst-friendly fields.
     df["city"] = df["city"].astype("string").str.strip()
     df["cuisine"] = df["cusine"].astype("string").str.strip()
     df["name"] = df["name"].astype("string").str.strip()
