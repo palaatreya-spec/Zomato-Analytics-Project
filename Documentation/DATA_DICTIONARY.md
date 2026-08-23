@@ -2,69 +2,44 @@
 
 ## Purpose
 
-This document defines the core fields used by the SQL analytics workflow so that metric definitions and transformations are easy to understand and reproduce.
+This document describes the main fields used in the cleaned restaurant-level dataset and the SQL/Power BI analysis.
 
-## Restaurants
-
-| Column | Type | Description |
-|---|---|---|
-| `restaurant_id` | INT | Unique restaurant identifier |
-| `name` | VARCHAR | Restaurant name |
-| `location` | VARCHAR | Restaurant location/city label |
-| `cuisine` | VARCHAR | Cuisine category |
-| `rating` | DECIMAL | Restaurant rating on a 1–5 scale |
-| `cost_for_two` | INT | Listed cost for two |
-| `online_order` | BOOLEAN | Whether online ordering is available |
-| `table_booking` | BOOLEAN | Whether table booking is available |
-| `total_orders` | INT | Derived order count |
-| `average_rating` | DECIMAL | Average rating calculated from review records |
-
-## Customers
+## Restaurant fields
 
 | Column | Type | Description |
 |---|---|---|
-| `customer_id` | INT | Unique customer identifier |
-| `name` | VARCHAR | Customer name |
-| `email` | VARCHAR | Customer email; unique when available |
-| `phone` | VARCHAR | Customer phone number |
-| `total_spent` | DECIMAL | Derived total order value |
-| `order_count` | INT | Derived number of orders |
+| `zomato_url` | TEXT | Restaurant-level identifier used to count unique restaurants |
+| `name` | TEXT | Restaurant name |
+| `city` | TEXT | City/location label |
+| `area` | TEXT | Area/locality |
+| `cuisine` | TEXT | Cuisine information from the source |
+| `rating_clean` | DECIMAL | Cleaned restaurant rating; placeholder values are treated as missing |
+| `rating_count` | INT | Number of ratings listed in the source |
+| `cost_for_two_clean` | DECIMAL | Cleaned listed cost-for-two |
+| `online_order` | INT | 1 if online ordering is listed, otherwise 0 |
+| `table_reservation` | INT | 1 if table reservation is listed, otherwise 0 |
+| `latitude` | DECIMAL | Parsed latitude from the source coordinates |
+| `longitude` | DECIMAL | Parsed longitude from the source coordinates |
 
-## Orders
+## Data-quality fields
 
-| Column | Type | Description |
-|---|---|---|
-| `order_id` | INT | Unique order identifier |
-| `customer_id` | INT | Customer placing the order |
-| `restaurant_id` | INT | Restaurant receiving the order |
-| `order_date` | DATETIME | Order timestamp |
-| `total_amount` | DECIMAL | Total order value |
-| `revenue_per_item` | DECIMAL | Derived order value divided by item quantity |
+| Column | Description |
+|---|---|
+| `has_rating` | Indicates whether a usable restaurant rating is available |
+| `has_cost` | Indicates whether a positive numeric cost-for-two value is available |
+| `coordinate_valid` | Basic check that latitude/longitude fall within India's expected geographic range |
 
-## Reviews
+## Derived analysis fields
 
-| Column | Type | Description |
-|---|---|---|
-| `review_id` | INT | Unique review identifier |
-| `customer_id` | INT | Customer submitting the review |
-| `restaurant_id` | INT | Restaurant being reviewed |
-| `rating` | DECIMAL | Review rating on a 1–5 scale |
-| `review_text` | TEXT | Review content |
-| `review_date` | DATE | Review date |
+The analysis may create simple categories such as:
 
-## Order Items
-
-| Column | Type | Description |
-|---|---|---|
-| `order_item_id` | INT | Unique order-item identifier |
-| `order_id` | INT | Parent order |
-| `item_name` | VARCHAR | Ordered item |
-| `price` | DECIMAL | Item price |
-| `quantity` | INT | Quantity ordered |
+- **Price Band:** Budget, Mid, Premium and Luxury based on listed cost-for-two.
+- **Rating Band:** Groups valid ratings into simple ranges such as `<3.0`, `3.0–3.4`, `3.5–3.9`, `4.0–4.4` and `4.5+`.
 
 ## Important metric notes
 
-- `total_revenue` is calculated from order `total_amount` in the analytical views.
-- `avg_order_value` is the average order `total_amount` for the relevant population.
-- `average_rating` is calculated from the `reviews` table and may differ from the source restaurant rating.
-- Derived metrics should be interpreted according to the project dataset and assumptions; they should not be treated as Zomato's actual internal financial metrics.
+- `cost_for_two_clean` is a listed pricing field, not restaurant revenue.
+- `rating_clean` excludes placeholder values such as `0`, `NEW` and `Nové` from valid-rating calculations.
+- `online_order` and `table_reservation` are availability indicators from the source data, not completed transaction measures.
+- The dataset does not contain customer-level orders, revenue, profit or retention data.
+- `zomato_url` is used as the practical restaurant-level identifier for this analysis.
