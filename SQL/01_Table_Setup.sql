@@ -25,18 +25,18 @@ CREATE TABLE zomato_restaurants_clean (
     latitude DECIMAL(10,7),
     longitude DECIMAL(10,7),
     timings TEXT,
-    online_order BOOLEAN,
-    table_reservation BOOLEAN,
-    delivery_only BOOLEAN,
+    online_order TINYINT,
+    table_reservation TINYINT,
+    delivery_only TINYINT,
     famous_food TEXT,
-    coordinate_valid BOOLEAN,
-    has_rating BOOLEAN,
-    has_cost BOOLEAN,
+    coordinate_valid TINYINT,
+    has_rating TINYINT,
+    has_cost TINYINT,
     PRIMARY KEY (zomato_url)
 );
 
 -- Import the cleaned CSV created by Python.
--- Update the file path for your local MySQL setup.
+-- Update the local file path for your MySQL setup.
 -- Example:
 -- LOAD DATA LOCAL INFILE '../Data/processed/zomato_restaurants_clean.csv'
 -- INTO TABLE zomato_restaurants_clean
