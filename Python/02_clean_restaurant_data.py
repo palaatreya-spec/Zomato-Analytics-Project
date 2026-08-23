@@ -43,13 +43,9 @@ def main() -> None:
     df["name"] = df["name"].astype("string").str.strip()
     df["area"] = df["area"].astype("string").str.strip()
 
-    # Convert Yes/No fields to 1/0 for simple analysis.
-    df["online_order"] = (
-        df["online_order"].astype("string").str.strip().str.lower().map({"yes": 1, "no": 0})
-    )
-    df["table_reservation"] = (
-        df["table_reservation"].astype("string").str.strip().str.lower().map({"yes": 1, "no": 0})
-    )
+    # Source fields are boolean in the current dataset. Convert them to 1/0.
+    df["online_order"] = df["online_order"].astype("boolean").astype("Int64")
+    df["table_reservation"] = df["table_reservation"].astype("boolean").astype("Int64")
 
     # Basic data-quality flags.
     df["has_rating"] = df["rating_clean"].notna()
