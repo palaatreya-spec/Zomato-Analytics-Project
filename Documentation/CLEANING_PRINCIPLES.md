@@ -1,25 +1,28 @@
 # Data Cleaning Principles
 
-The original cleaning workflow uses destructive `DELETE` and `UPDATE` statements, including duplicate removal, negative-order deletion, orphan removal, and invalid-rating replacement. fileciteturn72file0L2-L6
+The project uses Python/Pandas to create a cleaned restaurant-level dataset from the raw source.
 
-For a professional analytics workflow, cleaning should be auditable and reversible where practical.
+## Cleaning approach
 
-## Principles
+1. **Profile before cleaning** — inspect rows, columns, missing values and data types first.
+2. **Keep the raw source unchanged** — cleaning is performed on a working DataFrame and saved as a separate processed CSV.
+3. **Clean ratings** — values such as `0`, `NEW` and `Nové` are treated as unavailable ratings and converted to missing values.
+4. **Clean cost-for-two** — remove formatting such as commas and convert the field to numeric.
+5. **Clean rating counts** — convert rating counts to numeric where possible.
+6. **Clean text fields** — trim fields such as restaurant name, city, area and cuisine.
+7. **Create analysis-friendly flags** — convert online-order and table-reservation availability into simple 1/0 fields.
+8. **Validate coordinates** — create a basic flag for coordinates within a reasonable India geographic range.
+9. **Create quality flags** — keep simple indicators such as `has_rating` and `has_cost` so missing/invalid values remain visible.
 
-1. **Profile before cleaning.** Measure the issue first.
-2. **Preserve raw data.** Never overwrite the only copy of source data.
-3. **Prefer derived clean tables/views.** Keep raw and cleaned layers separate when possible.
-4. **Record every rule.** State why a value was changed, removed, or imputed.
-5. **Avoid silent deletion.** Deletions should be quantified before and after.
-6. **Validate after transformation.** Re-run quality gates after cleaning.
-7. **Separate data correction from business assumptions.** Fixing malformed data is different from estimating a business metric.
+## What we do not do
 
-## Portfolio standard
+- No arbitrary deletion of restaurants based only on missing ratings.
+- No revenue or customer metrics are created from pricing fields.
+- No ML-based imputation is used.
+- No advanced scoring model is applied.
 
-The final project should be able to answer:
+## Validation principle
 
-- What was wrong with the source?
-- How many records were affected?
-- What rule was applied?
-- Why was that rule appropriate?
-- Did the cleaned dataset pass QA afterward?
+After cleaning, the project checks row counts, unique restaurant identifiers, missing important fields, rating validity, cost validity and duplicate URLs through the SQL data-quality script.
+
+The goal is a clean, explainable dataset that can be used consistently by Python, MySQL and Power BI.
