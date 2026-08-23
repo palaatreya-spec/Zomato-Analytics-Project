@@ -1,7 +1,4 @@
-"""Basic exploratory analysis for the Zomato restaurant dataset.
-
-Creates simple CSV outputs that can be used for SQL checks or Power BI.
-"""
+"""Basic exploratory analysis for the cleaned Zomato restaurant dataset."""
 
 from pathlib import Path
 import pandas as pd
@@ -15,10 +12,12 @@ def main() -> None:
     df = pd.read_csv(SOURCE, low_memory=False)
     OUTPUT.mkdir(parents=True, exist_ok=True)
 
-    # Overall dataset summary
+    city = "city_clean"
+    cuisine = "cusine_clean"
+
     dataset_kpis = pd.DataFrame([{
         "restaurants": df["zomato_url"].nunique(),
-        "cities": df["city_clean"].nunique(),
+        "cities": df[city].nunique(),
         "rated_restaurants": int(df["has_rating"].sum()),
         "avg_rating": round(df["rating_clean"].mean(), 2),
         "avg_cost_for_two": round(
@@ -29,8 +28,7 @@ def main() -> None:
     }])
     dataset_kpis.to_csv(OUTPUT / "dataset_kpis.csv", index=False)
 
-    # City-level summary
-    city_kpis = df.groupby("city_clean").agg(
+    city_kpis = df.groupby(city).agg(
         restaurants=("zomato_url", "nunique"),
         avg_rating=("rating_clean", "mean"),
         avg_cost_for_two=("cost_for_two_clean", "mean"),
@@ -42,8 +40,7 @@ def main() -> None:
     city_kpis["online_order_pct"] = (city_kpis["online_order_pct"] * 100).round(2)
     city_kpis.to_csv(OUTPUT / "city_kpis.csv", index=False)
 
-    # Simple cuisine summary
-    cuisine_kpis = df.groupby("cusine_clean").agg(
+    cuisine_kpis = df.groupby(cuisine).agg(
         restaurants=("zomato_url", "nunique"),
         avg_rating=("rating_clean", "mean"),
         avg_cost_for_two=("cost_for_two_clean", "mean"),
@@ -53,7 +50,7 @@ def main() -> None:
     cuisine_kpis.to_csv(OUTPUT / "cuisine_kpis.csv", index=False)
 
     print(f"Restaurants: {df['zomato_url'].nunique():,}")
-    print(f"Cities: {df['city_clean'].nunique():,}")
+    print(f"Cities: {df[city].nunique():,}")
     print("EDA outputs written to Data/processed/")
 
 
