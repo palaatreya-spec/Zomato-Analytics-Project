@@ -48,7 +48,7 @@ def main() -> None:
         df["online_order"].astype("string").str.strip().str.lower().map({"yes": 1, "no": 0})
     )
     df["table_reservation"] = (
-        df["book_table"].astype("string").str.strip().str.lower().map({"yes": 1, "no": 0})
+        df["table_reservation"].astype("string").str.strip().str.lower().map({"yes": 1, "no": 0})
     )
 
     # Basic data-quality flags.
