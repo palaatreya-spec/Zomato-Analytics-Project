@@ -12,6 +12,9 @@ def main() -> None:
     df = pd.read_csv(SOURCE, low_memory=False)
     OUTPUT.mkdir(parents=True, exist_ok=True)
 
+    # Treat zero or missing listed cost as unavailable for cost-based analysis.
+    valid_cost = df["cost_for_two_clean"].where(df["cost_for_two_clean"] > 0)
+
     # Overall KPIs
     dataset_kpis = pd.DataFrame([{
         "restaurants": df["zomato_url"].nunique(),
@@ -19,43 +22,67 @@ def main() -> None:
         "rated_restaurants": int(df["has_rating"].sum()),
         "avg_rating": round(df["rating_clean"].mean(), 2),
         "median_rating": round(df["rating_clean"].median(), 2),
-        "avg_cost_for_two": round(df.loc[df["cost_for_two_clean"] > 0, "cost_for_two_clean"].mean(), 2),
-        "median_cost_for_two": round(df.loc[df["cost_for_two_clean"] > 0, "cost_for_two_clean"].median(), 2),
+        "avg_cost_for_two": round(valid_cost.mean(), 2),
+        "median_cost_for_two": round(valid_cost.median(), 2),
         "online_order_pct": round(df["online_order"].mean() * 100, 2),
         "table_reservation_pct": round(df["table_reservation"].mean() * 100, 2),
     }])
     dataset_kpis.to_csv(OUTPUT / "dataset_kpis.csv", index=False)
 
-    # City-level summary
+    # City-level summary. Cost metrics use only positive listed costs.
     city_kpis = df.groupby("city").agg(
         restaurants=("zomato_url", "nunique"),
         avg_rating=("rating_clean", "mean"),
-        avg_cost_for_two=("cost_for_two_clean", "mean"),
         rating_count=("rating_count", "sum"),
         online_order_pct=("online_order", "mean"),
     ).reset_index()
+
+    city_cost = (
+        df.assign(cost_valid=valid_cost)
+        .groupby("city")["cost_valid"]
+        .mean()
+        .rename("avg_cost_for_two")
+        .reset_index()
+    )
+    city_kpis = city_kpis.merge(city_cost, on="city", how="left")
     city_kpis["avg_rating"] = city_kpis["avg_rating"].round(2)
     city_kpis["avg_cost_for_two"] = city_kpis["avg_cost_for_two"].round(2)
     city_kpis["online_order_pct"] = (city_kpis["online_order_pct"] * 100).round(2)
     city_kpis.to_csv(OUTPUT / "city_kpis.csv", index=False)
 
-    # Cuisine-level summary
+    # Cuisine-level summary. Cost metrics use only positive listed costs.
     cuisine_kpis = df.groupby("cuisine").agg(
         restaurants=("zomato_url", "nunique"),
         avg_rating=("rating_clean", "mean"),
-        avg_cost_for_two=("cost_for_two_clean", "mean"),
     ).reset_index()
+
+    cuisine_cost = (
+        df.assign(cost_valid=valid_cost)
+        .groupby("cuisine")["cost_valid"]
+        .mean()
+        .rename("avg_cost_for_two")
+        .reset_index()
+    )
+    cuisine_kpis = cuisine_kpis.merge(cuisine_cost, on="cuisine", how="left")
     cuisine_kpis["avg_rating"] = cuisine_kpis["avg_rating"].round(2)
     cuisine_kpis["avg_cost_for_two"] = cuisine_kpis["avg_cost_for_two"].round(2)
     cuisine_kpis.to_csv(OUTPUT / "cuisine_kpis.csv", index=False)
 
-    # Basic descriptive statistics for key numeric fields.
-    stats = df[["rating_clean", "rating_count", "cost_for_two_clean"]].describe().T
+    # Descriptive statistics for key numeric fields.
+    stats = df[["rating_clean", "rating_count"]].describe().T
+    cost_stats = valid_cost.describe().to_frame().T
+    cost_stats.index = ["cost_for_two_clean"]
+    stats = pd.concat([stats, cost_stats])
     stats = stats[["count", "mean", "std", "min", "25%", "50%", "75%", "max"]].round(2)
     stats.to_csv(OUTPUT / "descriptive_statistics.csv")
 
-    # Simple Pearson correlation between numeric restaurant attributes.
-    correlation = df[["rating_clean", "rating_count", "cost_for_two_clean"]].corr().round(3)
+    # Pearson correlation using valid positive listed costs.
+    correlation_df = pd.DataFrame({
+        "rating_clean": df["rating_clean"],
+        "rating_count": df["rating_count"],
+        "cost_for_two_clean": valid_cost,
+    })
+    correlation = correlation_df.corr().round(3)
     correlation.to_csv(OUTPUT / "correlation_matrix.csv")
 
     print(f"Restaurants: {df['zomato_url'].nunique():,}")
