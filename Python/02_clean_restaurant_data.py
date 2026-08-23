@@ -11,7 +11,6 @@ OUTPUT = ROOT / "Data" / "processed" / "zomato_restaurants_clean.csv"
 def main() -> None:
     df = pd.read_csv(SOURCE, low_memory=False)
 
-    # Remove the unnamed index column created by the source export.
     if "Unnamed: 0" in df.columns:
         df = df.drop(columns=["Unnamed: 0"])
 
@@ -21,9 +20,15 @@ def main() -> None:
         errors="coerce",
     )
 
-    # Clean cost for two and convert it to a numeric column.
+    # Clean listed cost-for-two.
     df["cost_for_two_clean"] = pd.to_numeric(
         df["cost_for_two"].astype("string").str.replace(",", "", regex=False),
+        errors="coerce",
+    )
+
+    # Clean rating count if it contains text or commas.
+    df["rating_count"] = pd.to_numeric(
+        df["rating_count"].astype("string").str.replace(",", "", regex=False),
         errors="coerce",
     )
 
@@ -32,11 +37,21 @@ def main() -> None:
     df["latitude"] = pd.to_numeric(coordinates[0].str.strip(), errors="coerce")
     df["longitude"] = pd.to_numeric(coordinates[1].str.strip(), errors="coerce")
 
-    # Basic text cleaning.
-    for column in ["name", "city", "area", "cusine"]:
-        df[f"{column}_clean"] = df[column].astype("string").str.strip()
+    # Create clean analyst-friendly city and cuisine columns.
+    df["city"] = df["city"].astype("string").str.strip()
+    df["cuisine"] = df["cusine"].astype("string").str.strip()
+    df["name"] = df["name"].astype("string").str.strip()
+    df["area"] = df["area"].astype("string").str.strip()
 
-    # Simple data-quality flags.
+    # Convert Yes/No fields to 1/0 for simple analysis.
+    df["online_order"] = (
+        df["online_order"].astype("string").str.strip().str.lower().map({"yes": 1, "no": 0})
+    )
+    df["table_reservation"] = (
+        df["book_table"].astype("string").str.strip().str.lower().map({"yes": 1, "no": 0})
+    )
+
+    # Basic data-quality flags.
     df["has_rating"] = df["rating_clean"].notna()
     df["has_cost"] = df["cost_for_two_clean"].notna() & (df["cost_for_two_clean"] > 0)
     df["coordinate_valid"] = (
