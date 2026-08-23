@@ -48,13 +48,15 @@ def main() -> None:
     df["table_reservation"] = df["table_reservation"].astype("boolean").astype("Int64")
     df["delivery_only"] = df["delivery_only"].astype("boolean").astype("Int64")
 
-    # Basic data-quality flags.
-    df["has_rating"] = df["rating_clean"].notna()
-    df["has_cost"] = df["cost_for_two_clean"].notna() & (df["cost_for_two_clean"] > 0)
+    # Basic data-quality flags. Store them as 0/1 for SQL compatibility.
+    df["has_rating"] = df["rating_clean"].notna().astype("Int64")
+    df["has_cost"] = (
+        df["cost_for_two_clean"].notna() & (df["cost_for_two_clean"] > 0)
+    ).astype("Int64")
     df["coordinate_valid"] = (
         df["latitude"].between(6, 38)
         & df["longitude"].between(68, 98)
-    )
+    ).astype("Int64")
 
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(OUTPUT, index=False)
