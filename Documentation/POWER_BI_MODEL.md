@@ -1,19 +1,10 @@
-# Power BI Model & DAX Specification
+# Power BI Model — Zomato Restaurant Analytics
 
 ## Model grain
 
-Use `zomato_restaurants_clean` as the primary fact-like table at **one row per restaurant URL**. Do not create artificial order/customer tables.
+Use `zomato_restaurants_clean` as the main restaurant-level table, with one row per restaurant URL.
 
-## Recommended dimensions
-
-Where useful, create dimensions from the restaurant table:
-
-- `DimCity`
-- `DimCuisine`
-- `DimPriceBand`
-- `DimRatingBand`
-
-Keep the source table as the detailed restaurant table for drill-through.
+Keep the model simple. No customer, order or revenue tables are created because those fields are not available in the source dataset.
 
 ## Core measures
 
@@ -28,12 +19,16 @@ CALCULATE(
 
 Average Rating = AVERAGE(zomato_restaurants_clean[rating_clean])
 
-Median Cost for Two = MEDIAN(zomato_restaurants_clean[cost_for_two_clean])
+Average Cost for Two =
+CALCULATE(
+    AVERAGE(zomato_restaurants_clean[cost_for_two_clean]),
+    zomato_restaurants_clean[cost_for_two_clean] > 0
+)
 
 Online Order Restaurants =
 CALCULATE(
     [Restaurant Count],
-    zomato_restaurants_clean[online_order] = TRUE()
+    zomato_restaurants_clean[online_order] = 1
 )
 
 Online Order Adoption % =
@@ -42,24 +37,11 @@ DIVIDE([Online Order Restaurants], [Restaurant Count])
 Reservation Restaurants =
 CALCULATE(
     [Restaurant Count],
-    zomato_restaurants_clean[table_reservation] = TRUE()
+    zomato_restaurants_clean[table_reservation] = 1
 )
 
 Reservation Adoption % =
 DIVIDE([Reservation Restaurants], [Restaurant Count])
-
-Delivery Only Restaurants =
-CALCULATE(
-    [Restaurant Count],
-    zomato_restaurants_clean[delivery_only] = TRUE()
-)
-
-Delivery Only % =
-DIVIDE([Delivery Only Restaurants], [Restaurant Count])
-
-Average Rating Count = AVERAGE(zomato_restaurants_clean[rating_count])
-
-Average Performance Score = AVERAGE(zomato_restaurants_clean[performance_score])
 ```
 
 ## Calculated columns
@@ -86,39 +68,37 @@ SWITCH(
     TRUE(),
     ISBLANK(zomato_restaurants_clean[rating_clean]), "Unrated",
     zomato_restaurants_clean[rating_clean] < 3, "<3.0",
-    zomato_restaurants_clean[rating_clean] < 3.5, "3.0–3.4",
-    zomato_restaurants_clean[rating_clean] < 4, "3.5–3.9",
-    zomato_restaurants_clean[rating_clean] < 4.5, "4.0–4.4",
+    zomato_restaurants_clean[rating_clean] < 3.5, "3.0-3.4",
+    zomato_restaurants_clean[rating_clean] < 4, "3.5-3.9",
+    zomato_restaurants_clean[rating_clean] < 4.5, "4.0-4.4",
     "4.5+"
 )
 ```
 
-## Page design
+## Dashboard pages
 
-### Page 1 — Executive Market Overview
+### Page 1 — Market Overview
 
-KPI cards: Restaurant Count, Rated Restaurants, Average Rating, Median Cost, Online Order Adoption, Reservation Adoption.
+KPI cards: Restaurant Count, Rated Restaurants, Average Rating, Average Cost for Two, Online Order Adoption and Reservation Adoption.
 
-Visuals: top cities, restaurant supply map, rating distribution, digital adoption comparison.
+Visuals: restaurant supply by city, rating distribution, price-band distribution and digital-ordering comparison.
 
-### Page 2 — City Intelligence
+### Page 2 — City Analysis
 
-Use city as the main slicer. Show restaurant supply, rating, pricing, engagement and digital adoption. Include a scatter plot of restaurant count vs average rating with bubble size based on rating count.
+Use city, area, price band, rating band, online order and table reservation as slicers where useful.
 
-### Page 3 — Restaurant Performance
+Visuals: restaurant count, average rating, average cost for two, rating count and online-order adoption by city.
 
-Show Performance Score distribution, top performers, rating vs engagement, price band mix and a detailed restaurant drill-through.
+### Page 3 — Restaurant & Cuisine Analysis
 
-### Page 4 — Cuisine Intelligence
-
-Show cuisine supply, rating, price, engagement and digital adoption. Require a minimum restaurant-count threshold for rankings to avoid tiny categories dominating the view.
+Visuals: top cuisines by restaurant count, cuisine rating comparison, cuisine pricing comparison, rating distribution and a restaurant detail table.
 
 ## UX rules
 
 - Keep slicers consistent across pages.
-- Use dynamic titles.
 - Show units clearly (`₹`, `%`, counts).
-- Avoid pie charts for high-cardinality cuisine data.
-- Use tooltips for secondary metrics.
-- Use drill-through for restaurant detail rather than overcrowding the overview.
-- Include a visible data-quality/limitations note on the report.
+- Prefer simple bar charts, cards and tables.
+- Avoid overcrowding the dashboard.
+- Do not use a custom Performance Score or weighted ranking model.
+- Add a small methodology note: listed cost-for-two is a pricing field, not realized revenue.
+- Keep data-quality limitations visible where relevant.
