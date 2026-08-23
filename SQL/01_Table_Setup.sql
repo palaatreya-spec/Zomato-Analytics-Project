@@ -7,38 +7,39 @@ USE zomato_analytics;
 DROP TABLE IF EXISTS zomato_restaurants_clean;
 
 CREATE TABLE zomato_restaurants_clean (
-    source_row_id INT,
     sno INT,
     zomato_url VARCHAR(500) NOT NULL,
     name VARCHAR(255),
     city VARCHAR(100),
     area VARCHAR(150),
-    rating_raw VARCHAR(20),
-    rating_clean DECIMAL(3,2),
+    rating VARCHAR(20),
     rating_count INT,
     telephone VARCHAR(255),
-    cuisine VARCHAR(500),
-    cost_for_two_raw VARCHAR(50),
-    cost_for_two_clean DECIMAL(10,2),
+    cusine VARCHAR(500),
+    cost_for_two VARCHAR(50),
     address TEXT,
     coordinates VARCHAR(100),
-    latitude DECIMAL(10,7),
-    longitude DECIMAL(10,7),
     timings TEXT,
     online_order TINYINT,
     table_reservation TINYINT,
     delivery_only TINYINT,
     famous_food TEXT,
-    coordinate_valid TINYINT,
+    rating_clean DECIMAL(3,2),
+    cost_for_two_clean DECIMAL(10,2),
+    latitude DECIMAL(10,7),
+    longitude DECIMAL(10,7),
+    cuisine VARCHAR(500),
     has_rating TINYINT,
     has_cost TINYINT,
+    coordinate_valid TINYINT,
     PRIMARY KEY (zomato_url)
 );
 
 -- Import the cleaned CSV created by Python.
 -- Update the local file path for your MySQL setup.
+-- The column order below matches the Python output CSV.
 -- Example:
--- LOAD DATA LOCAL INFILE '../Data/processed/zomato_restaurants_clean.csv'
+-- LOAD DATA LOCAL INFILE 'C:/path/to/Zomato-Analytics-Project-main/Data/processed/zomato_restaurants_clean.csv'
 -- INTO TABLE zomato_restaurants_clean
 -- FIELDS TERMINATED BY ',' ENCLOSED BY '"'
 -- LINES TERMINATED BY '\n'
