@@ -44,6 +44,19 @@ def add_check(checks, name, passed, detail):
     })
 
 
+def write_report(checks):
+    report = pd.DataFrame(checks)
+    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    report.to_csv(OUTPUT, index=False)
+
+    failures = int((report["status"] == "FAIL").sum())
+    print("\nPython validation report")
+    print("=" * 28)
+    print(report[["check", "status", "detail"]].to_string(index=False))
+    print(f"\nChecks: {len(report)} | Failures: {failures}")
+    return failures
+
+
 def main() -> None:
     if not RAW.exists():
         raise FileNotFoundError(f"Raw source file not found: {RAW}")
@@ -69,9 +82,19 @@ def main() -> None:
         "missing=" + (", ".join(sorted(missing_columns)) if missing_columns else "none"),
     )
 
-    for column in ["online_order", "table_reservation", "delivery_only", "has_rating", "has_cost", "coordinate_valid"]:
-        if column not in clean.columns:
-            continue
+    # Do not continue into column-specific checks if the cleaned schema is incomplete.
+    if missing_columns:
+        failures = write_report(checks)
+        raise SystemExit("Python validation FAILED because required columns are missing.")
+
+    for column in [
+        "online_order",
+        "table_reservation",
+        "delivery_only",
+        "has_rating",
+        "has_cost",
+        "coordinate_valid",
+    ]:
         values = set(clean[column].dropna().unique().tolist())
         add_check(
             checks,
@@ -80,66 +103,77 @@ def main() -> None:
             f"observed={sorted(values)}",
         )
 
-    ratings_valid = clean["rating_clean"].dropna().between(1, 5).all()
+    ratings = clean["rating_clean"].dropna()
+    ratings_valid = ratings.between(1, 5).all()
     add_check(
         checks,
         "Ratings are within 1-5",
         ratings_valid,
-        f"invalid_count={(~clean['rating_clean'].dropna().between(1, 5)).sum():,}",
+        f"invalid_count={(~ratings.between(1, 5)).sum():,}",
     )
 
-    rating_counts_valid = clean["rating_count"].dropna().ge(0).all()
+    rating_counts = clean["rating_count"].dropna()
+    rating_counts_valid = rating_counts.ge(0).all()
     add_check(
         checks,
         "Rating counts are non-negative",
         rating_counts_valid,
-        f"invalid_count={(clean['rating_count'].dropna() < 0).sum():,}",
+        f"invalid_count={(rating_counts < 0).sum():,}",
     )
 
-    costs_valid = clean["cost_for_two_clean"].dropna().gt(0).all()
+    costs = clean["cost_for_two_clean"].dropna()
+    costs_valid = costs.gt(0).all()
     add_check(
         checks,
         "Cost values are positive",
         costs_valid,
-        f"invalid_count={(clean['cost_for_two_clean'].dropna() <= 0).sum():,}",
+        f"invalid_count={(costs <= 0).sum():,}",
     )
 
-    lat_valid = clean["latitude"].dropna().between(6, 38).all()
-    lon_valid = clean["longitude"].dropna().between(68, 98).all()
+    latitudes = clean["latitude"].dropna()
+    longitudes = clean["longitude"].dropna()
+    lat_valid = latitudes.between(6, 38).all()
+    lon_valid = longitudes.between(68, 98).all()
     add_check(
         checks,
         "Latitude values are within India-focused bounds",
         lat_valid,
-        f"invalid_count={(~clean['latitude'].dropna().between(6, 38)).sum():,}",
+        f"invalid_count={(~latitudes.between(6, 38)).sum():,}",
     )
     add_check(
         checks,
         "Longitude values are within India-focused bounds",
         lon_valid,
-        f"invalid_count={(~clean['longitude'].dropna().between(68, 98)).sum():,}",
+        f"invalid_count={(~longitudes.between(68, 98)).sum():,}",
     )
 
     coordinate_flag_expected = (
         clean["latitude"].between(6, 38) & clean["longitude"].between(68, 98)
     ).astype("int8")
-    coordinate_flag_consistent = clean["coordinate_valid"].astype("int8").eq(coordinate_flag_expected).all()
+    coordinate_flag_actual = clean["coordinate_valid"].astype("int8")
+    coordinate_flag_consistent = coordinate_flag_actual.eq(coordinate_flag_expected).all()
     add_check(
         checks,
         "Coordinate validity flag is consistent",
         coordinate_flag_consistent,
-        f"mismatches={(~clean['coordinate_valid'].astype('int8').eq(coordinate_flag_expected)).sum():,}",
+        f"mismatches={(~coordinate_flag_actual.eq(coordinate_flag_expected)).sum():,}",
     )
 
+    rating_flag_actual = clean["has_rating"].astype("int8")
+    rating_flag_expected = clean["rating_clean"].notna().astype("int8")
     add_check(
         checks,
         "has_rating flag is consistent",
-        clean["has_rating"].astype("int8").eq(clean["rating_clean"].notna().astype("int8")).all(),
+        rating_flag_actual.eq(rating_flag_expected).all(),
         "flag matches rating_clean availability",
     )
+
+    cost_flag_actual = clean["has_cost"].astype("int8")
+    cost_flag_expected = clean["cost_for_two_clean"].notna().astype("int8")
     add_check(
         checks,
         "has_cost flag is consistent",
-        clean["has_cost"].astype("int8").eq(clean["cost_for_two_clean"].notna().astype("int8")).all(),
+        cost_flag_actual.eq(cost_flag_expected).all(),
         "flag matches cost_for_two_clean availability",
     )
 
@@ -161,15 +195,7 @@ def main() -> None:
             str(path.relative_to(ROOT)) if path.exists() else "missing",
         )
 
-    report = pd.DataFrame(checks)
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    report.to_csv(OUTPUT, index=False)
-
-    failures = int((report["status"] == "FAIL").sum())
-    print("\nPython validation report")
-    print("=" * 28)
-    print(report[["check", "status", "detail"]].to_string(index=False))
-    print(f"\nChecks: {len(report)} | Failures: {failures}")
+    failures = write_report(checks)
 
     if failures:
         raise SystemExit("Python validation FAILED. Fix the issues before loading MySQL.")
