@@ -1,4 +1,4 @@
-"""Run the three simple Python analysis steps in order."""
+"""Run the complete Python preparation and validation pipeline in order."""
 
 from pathlib import Path
 import subprocess
@@ -10,6 +10,7 @@ SCRIPTS = [
     ROOT / "Python" / "01_source_profile.py",
     ROOT / "Python" / "02_clean_restaurant_data.py",
     ROOT / "Python" / "03_eda_analysis.py",
+    ROOT / "Python" / "04_validate_output.py",
 ]
 
 
@@ -24,11 +25,17 @@ def main() -> None:
         subprocess.run([sys.executable, str(script)], cwd=ROOT, check=True)
 
     cleaned = ROOT / "Data" / "processed" / "zomato_restaurants_clean.csv"
+    validation = ROOT / "Data" / "processed" / "python_validation_report.csv"
+
     if not cleaned.exists():
         raise FileNotFoundError("The cleaned CSV was not created.")
+    if not validation.exists():
+        raise FileNotFoundError("The Python validation report was not created.")
 
-    print("\nPython analysis completed successfully.")
+    print("\nPython pipeline completed successfully.")
     print(f"Cleaned dataset: {cleaned}")
+    print(f"Validation report: {validation}")
+    print("Python output is ready for final SQL review.")
 
 
 if __name__ == "__main__":
