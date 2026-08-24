@@ -44,6 +44,14 @@ def add_check(checks, name, passed, detail):
     })
 
 
+def add_info(checks, name, detail):
+    checks.append({
+        "check": name,
+        "status": "INFO",
+        "detail": detail,
+    })
+
+
 def write_report(checks):
     report = pd.DataFrame(checks)
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
@@ -82,7 +90,6 @@ def main() -> None:
         "missing=" + (", ".join(sorted(missing_columns)) if missing_columns else "none"),
     )
 
-    # Do not continue into column-specific checks if the cleaned schema is incomplete.
     if missing_columns:
         failures = write_report(checks)
         raise SystemExit("Python validation FAILED because required columns are missing.")
@@ -104,46 +111,41 @@ def main() -> None:
         )
 
     ratings = clean["rating_clean"].dropna()
-    ratings_valid = ratings.between(1, 5).all()
     add_check(
         checks,
         "Ratings are within 1-5",
-        ratings_valid,
+        ratings.between(1, 5).all(),
         f"invalid_count={(~ratings.between(1, 5)).sum():,}",
     )
 
     rating_counts = clean["rating_count"].dropna()
-    rating_counts_valid = rating_counts.ge(0).all()
     add_check(
         checks,
         "Rating counts are non-negative",
-        rating_counts_valid,
+        rating_counts.ge(0).all(),
         f"invalid_count={(rating_counts < 0).sum():,}",
     )
 
     costs = clean["cost_for_two_clean"].dropna()
-    costs_valid = costs.gt(0).all()
     add_check(
         checks,
         "Cost values are positive",
-        costs_valid,
+        costs.gt(0).all(),
         f"invalid_count={(costs <= 0).sum():,}",
     )
 
     latitudes = clean["latitude"].dropna()
     longitudes = clean["longitude"].dropna()
-    lat_valid = latitudes.between(6, 38).all()
-    lon_valid = longitudes.between(68, 98).all()
     add_check(
         checks,
         "Latitude values are within India-focused bounds",
-        lat_valid,
+        latitudes.between(6, 38).all(),
         f"invalid_count={(~latitudes.between(6, 38)).sum():,}",
     )
     add_check(
         checks,
         "Longitude values are within India-focused bounds",
-        lon_valid,
+        longitudes.between(68, 98).all(),
         f"invalid_count={(~longitudes.between(68, 98)).sum():,}",
     )
 
@@ -151,11 +153,10 @@ def main() -> None:
         clean["latitude"].between(6, 38) & clean["longitude"].between(68, 98)
     ).astype("int8")
     coordinate_flag_actual = clean["coordinate_valid"].astype("int8")
-    coordinate_flag_consistent = coordinate_flag_actual.eq(coordinate_flag_expected).all()
     add_check(
         checks,
         "Coordinate validity flag is consistent",
-        coordinate_flag_consistent,
+        coordinate_flag_actual.eq(coordinate_flag_expected).all(),
         f"mismatches={(~coordinate_flag_actual.eq(coordinate_flag_expected)).sum():,}",
     )
 
@@ -179,12 +180,20 @@ def main() -> None:
 
     if "sno" in clean.columns:
         duplicate_sno = int(clean["sno"].duplicated().sum())
-        add_check(
+        add_info(
             checks,
-            "SNO is unique",
-            duplicate_sno == 0,
+            "SNO uniqueness",
+            "SNO is retained as a source field and is not treated as a unique business key; "
             f"duplicate_rows={duplicate_sno:,}",
         )
+
+    duplicate_rows = int(clean.duplicated().sum())
+    add_check(
+        checks,
+        "Exact duplicate rows are absent",
+        duplicate_rows == 0,
+        f"duplicate_rows={duplicate_rows:,}",
+    )
 
     for filename in REQUIRED_ANALYSIS_OUTPUTS:
         path = OUTPUT.parent / filename
