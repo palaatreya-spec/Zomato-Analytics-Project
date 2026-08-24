@@ -59,24 +59,32 @@ def main() -> None:
     )
     df.loc[~df["rating_clean"].between(1, 5), "rating_clean"] = pd.NA
 
-    # Listed cost for two: remove thousands separators and reject non-positive values.
+    # Listed cost for two: remove separators/non-numeric symbols and reject non-positive values.
     df["cost_for_two_clean"] = pd.to_numeric(
-        df["cost_for_two"].astype("string").str.replace(",", "", regex=False).str.strip(),
+        df["cost_for_two"]
+        .astype("string")
+        .str.replace(r"[^0-9.\-]", "", regex=True)
+        .str.strip(),
         errors="coerce",
     )
     df.loc[df["cost_for_two_clean"] <= 0, "cost_for_two_clean"] = pd.NA
 
-    # Rating count: remove separators, convert to numeric, and reject negatives.
+    # Rating count: remove separators/non-numeric symbols and reject negatives.
     df["rating_count"] = pd.to_numeric(
-        df["rating_count"].astype("string").str.replace(",", "", regex=False).str.strip(),
+        df["rating_count"]
+        .astype("string")
+        .str.replace(r"[^0-9.\-]", "", regex=True)
+        .str.strip(),
         errors="coerce",
     )
     df.loc[df["rating_count"] < 0, "rating_count"] = pd.NA
 
-    # Split latitude and longitude from the source coordinate field.
-    coordinates = df["coordinates"].astype("string").str.split(",", n=1, expand=True)
-    df["latitude"] = pd.to_numeric(coordinates[0].str.strip(), errors="coerce")
-    df["longitude"] = pd.to_numeric(coordinates[1].str.strip(), errors="coerce")
+    # Split latitude and longitude safely, even when a source coordinate is malformed.
+    coordinates = df["coordinates"].astype("string").str.extract(
+        r"^\s*([^,]+)\s*,\s*(.+?)\s*$"
+    )
+    df["latitude"] = pd.to_numeric(coordinates[0], errors="coerce")
+    df["longitude"] = pd.to_numeric(coordinates[1], errors="coerce")
 
     # India-focused geographic bounds. Invalid or placeholder coordinates become missing.
     coordinate_valid = (
