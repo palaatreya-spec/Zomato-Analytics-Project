@@ -9,6 +9,7 @@ CLEAN = ROOT / "Data" / "processed" / "zomato_restaurants_clean.csv"
 OUTPUT = ROOT / "Data" / "processed" / "python_validation_report.csv"
 
 REQUIRED_CLEAN_COLUMNS = {
+    "zomato_url",
     "rating_clean",
     "cost_for_two_clean",
     "rating_count",
@@ -109,6 +110,23 @@ def main() -> None:
             values.issubset({0, 1}),
             f"observed={sorted(values)}",
         )
+
+    url = clean["zomato_url"].astype("string").str.strip()
+    missing_urls = int(url.isna().sum() + url.eq("").sum())
+    unique_urls = int(url.nunique(dropna=True))
+    duplicate_url_rows = int(url.duplicated(keep=False).sum())
+    add_check(
+        checks,
+        "Zomato URLs are present",
+        missing_urls == 0,
+        f"missing_or_blank={missing_urls:,}",
+    )
+    add_check(
+        checks,
+        "Zomato URLs are unique",
+        missing_urls == 0 and unique_urls == len(clean),
+        f"rows={len(clean):,}, unique_urls={unique_urls:,}, duplicate_rows={duplicate_url_rows:,}",
+    )
 
     ratings = clean["rating_clean"].dropna()
     add_check(
