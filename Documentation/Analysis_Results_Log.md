@@ -164,10 +164,35 @@
 
 **Key observation:** Online-order availability is almost evenly split, with **49.58%** of restaurants offering online ordering and **50.42%** not offering it. The difference is only **1,900 restaurants (0.84 percentage points)**.
 
-**README-worthy:** Supporting context for later online-ordering analyses; not strong enough as a standalone headline finding.
+### Q12 — Online Ordering by City
+- **Status:** Completed and result recorded.
+- **Question:** How does online-order availability vary across cities?
+- **Output size:** 54 cities supplied in the conversation.
 
-### Q12 — Pending result record
-- **Status:** Result to be reconstructed from the completed SQL work.
+**Highest online-order adoption:**
+
+| City | Restaurant count | Online-order restaurants | Online-order % |
+|---|---:|---:|---:|
+| Jhansi | 580 | 423 | 72.93% |
+| Patiala | 755 | 549 | 72.72% |
+| Jabalpur | 805 | 536 | 66.58% |
+| Gwalior | 944 | 627 | 66.42% |
+| Kota | 959 | 599 | 62.46% |
+| Nagpur | 2,954 | 1,832 | 62.02% |
+| Chandigarh | 4,278 | 2,597 | 60.71% |
+| Bhopal | 2,131 | 1,289 | 60.49% |
+| Agra | 1,837 | 1,110 | 60.42% |
+| Surat | 2,648 | 1,563 | 59.03% |
+
+**Major-city results:** Hyderabad 52.34%; Kolkata 51.54%; Ahmedabad 50.82%; Delhi NCR 50.78%; Chennai 50.06%; Mumbai 47.64%; Bengaluru 47.17%; Pune 47.01%.
+
+**Lowest online-order adoption:** Goa 15.73%; Puducherry 36.56%; Siliguri 34.78%; Trivandrum 38.49%; Kochi 41.75%; Guwahati 42.17%; Coimbatore 43.35%.
+
+**Key observations:** Online-order adoption varies substantially by city, ranging from **72.93% in Jhansi to 15.73% in Goa**. Among large restaurant markets, Hyderabad has the highest adoption in the supplied results (52.34%), while Pune (47.01%), Bengaluru (47.17%) and Mumbai (47.64%) are below 50%.
+
+**Interpretation caution:** Small cities can produce extreme percentages because their restaurant counts are much smaller. City comparisons should therefore consider both adoption percentage and restaurant count.
+
+**README-worthy:** Yes — useful for geographic digital-adoption analysis.
 
 ### Q13 — Online Ordering vs Restaurant Characteristics
 - **Status:** Query completed; exact output to be recorded/reconstructed.
@@ -233,6 +258,7 @@ Only validated findings with actual recorded outputs should be promoted here.
 - Q09: Several specialized cuisine listings show stronger observed ratings and engagement than large mainstream listings; Burger, Fast Food has 3.71 average rating and 331 average ratings.
 - Q10: North Indian is the largest cuisine listing by restaurant presence (20,549; 9.21% in this query); this largely validates Q08.
 - Q11: Online ordering is almost evenly split: 49.58% available vs 50.42% unavailable.
+- Q12: Online-order adoption varies widely by city, from 72.93% in Jhansi to 15.73% in Goa. Among major markets, Hyderabad leads the supplied results at 52.34%, while Bengaluru, Mumbai and Pune are below 48%.
 - Q14: Online-ordering groups show materially different average estimated financial metrics; treat as an association, not causation.
 
 ---
