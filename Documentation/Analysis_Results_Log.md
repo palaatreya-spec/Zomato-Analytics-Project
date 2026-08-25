@@ -153,6 +153,29 @@
 
 **README-worthy:** Yes — this is a strong new geographic/business-performance finding and does not duplicate the online-ordering analyses.
 
+### Q17 — City Ranking by Restaurant Revenue
+- **Status:** Completed and result recorded.
+- **Business question:** Which cities rank highest by average estimated revenue per restaurant?
+- **SQL skill demonstrated:** Subquery + `GROUP BY` + `HAVING` + `RANK() OVER()` window function.
+- **Method:** Cities with at least 500 restaurants were included to avoid unstable rankings from very small samples.
+
+| Rank | City | Restaurant count | Avg estimated revenue |
+|---:|---|---:|---:|
+| 1 | Mumbai | 25,692 | ₹70,896 |
+| 2 | Bengaluru | 20,283 | ₹63,964 |
+| 3 | Kolkata | 9,571 | ₹56,602 |
+| 4 | Hyderabad | 12,393 | ₹54,216 |
+| 5 | Delhi NCR | 38,699 | ₹47,103 |
+| 6 | Pune | 15,430 | ₹42,755 |
+| 7 | Jaipur | 5,367 | ₹33,941 |
+| 8 | Chennai | 11,917 | ₹33,699 |
+| 9 | Chandigarh | 4,278 | ₹33,503 |
+| 10 | Ahmedabad | 6,432 | ₹28,665 |
+
+- **Useful finding:** Mumbai ranks **#1** in estimated revenue per restaurant, followed by Bengaluru, Kolkata and Hyderabad. Delhi NCR ranks **#5** despite having the largest restaurant base.
+- **Cross-query insight:** Q16 and Q17 tell a consistent story: **Mumbai leads on estimated unit economics, while Delhi NCR leads on restaurant scale.**
+- **README-worthy:** Yes, but mainly as supporting SQL/window-function analysis because it validates Q16 rather than introducing a completely separate business finding.
+
 ---
 
 ## Cross-Query Findings Worth Carrying Into the Final README
@@ -164,7 +187,7 @@
 5. **Online ordering is nationally balanced but geographically uneven:** 49.58% overall availability, but city adoption ranges from **15.73% to 72.93%**.
 6. **Online-order restaurants show a stronger customer profile:** 3.55 vs 3.39 average rating and 173 vs 115 average rating count, with slightly lower cost for two and higher table-reservation adoption.
 7. **Financial contribution differs materially by online-order group:** the 111,310-restaurant group represents 49.58% of restaurants but contributes **61.81% of estimated revenue** and **60.58% of estimated contribution margin**, pending final verification of the duplicated status label in Q14/Q15.
-8. **Market size vs unit economics:** Q16 shows that **Delhi NCR has the largest restaurant base**, while **Mumbai has the strongest estimated revenue and contribution margin per restaurant** among the supplied cities. Delhi NCR and Mumbai are nearly tied in total estimated revenue, despite their different per-restaurant economics.
+8. **Market size vs unit economics:** Q16/Q17 show that **Delhi NCR has the largest restaurant base**, while **Mumbai has the strongest estimated revenue and contribution margin per restaurant** among the supplied cities. Delhi NCR and Mumbai are nearly tied in total estimated revenue, despite their different per-restaurant economics.
 9. **Financial results are observational:** Q14–Q16 do not establish causation; the estimated financial metrics should be interpreted as modeled/analytical outputs rather than audited financial statements.
 
 ---
@@ -180,7 +203,7 @@
 ## Recording Rules
 
 1. Record actual outputs, not remembered values.
-2. For large outputs, preserve the important aggregates/rankings rather than copying every row.
+2. For large outputs, preserve important aggregates/rankings rather than copying every row.
 3. Record the business question, useful finding and caveat for each query.
 4. Avoid duplicate headline insights when two queries validate the same result.
 5. Do not turn observational associations into causal claims.
