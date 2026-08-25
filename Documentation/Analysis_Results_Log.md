@@ -156,8 +156,35 @@
 
 **README-worthy:** Yes — potentially useful as a customer-engagement finding, with the causation caveat.
 
-### Q07 — Pending result record
-- **Status:** Result to be reconstructed from the completed SQL work.
+### Q07 — Most Reviewed Restaurants
+- **Status:** Completed and result recorded.
+- **Question:** Which restaurants have the highest number of recorded ratings/reviews, and what characteristics do they have?
+- **Output size:** Top 20 restaurants.
+
+**Top results:**
+
+| Restaurant | City | Rating | Rating count | Cost for two | Online order | Table reservation |
+|---|---|---:|---:|---:|---:|---:|
+| Bawarchi | Hyderabad | 4.50 | 42,621 | ₹750 | Yes | No |
+| Byg Brewski Brewing Company | Bengaluru | 4.90 | 19,305 | ₹1,600 | Yes | Yes |
+| Toit | Bengaluru | 4.60 | 15,731 | ₹1,000 | No | No |
+| Truffles | Bengaluru | 4.60 | 15,653 | ₹900 | No | No |
+| Hauz Khas Social | Delhi NCR | 4.70 | 14,936 | — | No | Yes |
+| AB's - Absolute Barbecues | Bengaluru | 4.80 | 13,164 | ₹1,600 | No | Yes |
+| Paradise | Hyderabad | 4.70 | 13,152 | ₹800 | Yes | No |
+| The Black Pearl | Bengaluru | 4.90 | 12,686 | ₹1,500 | No | Yes |
+| Shah Ghouse Hotel & Restaurant | Hyderabad | 4.20 | 12,514 | ₹800 | Yes | No |
+| Peter Cat | Kolkata | 4.20 | 11,917 | ₹1,200 | Yes | No |
+
+**Key observations:**
+- **Bawarchi (Hyderabad)** is the most-reviewed restaurant in the result with **42,621 ratings** and a **4.50 rating**.
+- The top-reviewed restaurants generally have strong ratings, with many above **4.0**, suggesting that highly reviewed restaurants can also have strong customer ratings.
+- **Bengaluru and Hyderabad are prominent among the top-reviewed restaurants**, indicating strong customer engagement in these markets.
+- Online ordering and table reservations are mixed among the most-reviewed restaurants, so neither feature is universally present among the top-engagement restaurants.
+
+**Interpretation caution:** This query identifies restaurants with the highest recorded rating counts; rating count should not be treated as a direct measure of revenue or profitability.
+
+**README-worthy:** Potentially — useful for identifying high-engagement restaurant examples and supporting city/customer-engagement analysis.
 
 ### Q08 — Pending result record
 - **Status:** Result to be reconstructed from the completed SQL work.
@@ -241,6 +268,7 @@ Only validated findings with actual recorded outputs should be promoted here.
 - Q04: Ratings are concentrated around the 3.2–3.9 range, with 3.30 as the largest individual rating bucket at 8.98% of rated restaurants.
 - Q05: 76.47% of rated restaurants fall in the 3.0–3.9 rating bands, while only 0.43% fall below 2.5 and 14.02% are rated 4.0+.
 - Q06: The 4.0+ rating band has substantially higher observed rating activity (570 average ratings per restaurant) than the 3.0–3.4 band (29), indicating a strong association between high ratings and customer engagement in this dataset.
+- Q07: Bawarchi in Hyderabad leads the top-20 most-reviewed list with 42,621 ratings; Bengaluru and Hyderabad are prominent among the highest-engagement restaurants, while online ordering and table reservation adoption are mixed.
 - Q14: Online-ordering groups show materially different average estimated financial metrics in the current analysis. Treat as an association, not causation.
 
 ---
