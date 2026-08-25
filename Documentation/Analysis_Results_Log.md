@@ -23,8 +23,29 @@
 
 **README-worthy:** Potentially, as a dataset overview statistic.
 
-### Q02 — Pending result record
-- **Status:** Result to be reconstructed from the completed SQL work.
+### Q02 — Restaurant Supply by City
+- **Status:** Completed and result recorded.
+- **Question:** How is the restaurant supply distributed across cities?
+- **Output size:** 83 cities; full output is not duplicated here because the complete SQL result was supplied in the conversation.
+
+**Top cities by restaurant count:**
+
+| City | Restaurant count | % of total |
+|---|---:|---:|
+| Delhi NCR | 38,699 | 17.24% |
+| Mumbai | 25,692 | 11.44% |
+| Bengaluru | 20,283 | 9.03% |
+| Pune | 15,430 | 6.87% |
+| Hyderabad | 12,393 | 5.52% |
+| Chennai | 11,917 | 5.31% |
+| Kolkata | 9,571 | 4.26% |
+| Ahmedabad | 6,432 | 2.86% |
+| Jaipur | 5,367 | 2.39% |
+| Chandigarh | 4,278 | 1.91% |
+
+**Key observation:** Delhi NCR has the largest restaurant presence in the dataset, followed by Mumbai and Bengaluru. The top three cities together account for approximately **37.7%** of the dataset's restaurant records.
+
+**README-worthy:** Yes — useful for establishing geographic concentration of restaurant supply.
 
 ### Q03 — Pending result record
 - **Status:** Result to be reconstructed from the completed SQL work.
@@ -118,6 +139,7 @@
 Only validated findings with actual recorded outputs should be promoted here.
 
 - Q01: Dataset contains 224,520 restaurants across 83 cities, 2,500 areas and 19,675 cuisine values.
+- Q02: Restaurant supply is geographically concentrated; Delhi NCR, Mumbai and Bengaluru account for approximately 37.7% of restaurant records.
 - Q14: Online-ordering groups show materially different average estimated financial metrics in the current analysis. Treat as an association, not causation.
 
 ---
