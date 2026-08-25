@@ -8,7 +8,7 @@
 
 ## SQL Results
 
-### Q01 — Overall Dataset Coverage
+### Q01 — Total restaurants, total cities, total areas, total cuisines
 - **Status:** Completed and result recorded.
 - **Question:** What is the overall scale and coverage of the restaurant dataset?
 
@@ -23,7 +23,7 @@
 
 **README-worthy:** Potentially, as a dataset overview statistic.
 
-### Q02 — Restaurant Supply by City
+### Q02 — Restaurant distribution by city
 - **Status:** Completed and result recorded.
 - **Question:** How is the restaurant supply distributed across cities?
 - **Output size:** 83 cities; full output is not duplicated here because the complete SQL result was supplied in the conversation.
@@ -147,9 +147,10 @@ Only validated findings with actual recorded outputs should be promoted here.
 ## Recording Rules
 
 1. Record actual outputs, not estimates or remembered values.
-2. For small outputs, preserve the complete result.
-3. For large outputs, preserve the important aggregates, rankings or representative rows needed to support the conclusion.
-4. Record the business question and the key insight for every completed analysis.
-5. Record caveats when a result could be misinterpreted.
-6. Do not add README claims until the underlying result has been validated.
-7. Update this file after each completed SQL/Python analysis.
+2. Use the exact query name from the SQL project when available.
+3. For small outputs, preserve the complete result.
+4. For large outputs, preserve the important aggregates, rankings or representative rows needed to support the conclusion.
+5. Record the business question and the key insight for every completed analysis.
+6. Record caveats when a result could be misinterpreted.
+7. Do not add README claims until the underlying result has been validated.
+8. Update this file after each completed SQL/Python analysis.
