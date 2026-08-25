@@ -8,7 +8,7 @@
 
 - Raw compressed source dataset under `Data/`.
 - Python pipeline: source profiling, cleaning, EDA, validation, and pipeline runner.
-- SQL pipeline: table setup, data-quality checks, restaurant analysis, KPI analysis, and exploratory analysis through Q18.
+- SQL pipeline: table setup, data-quality checks, restaurant analysis, KPI analysis, and exploratory analysis through Q19.
 - Separate source-backend SQL setup/analysis files.
 - Unit-economics table and analysis are represented in the current workflow.
 - Power BI `.pbix` and supporting model documentation from an earlier dashboard version.
@@ -24,13 +24,13 @@ There are two similarly named result-log files:
 
 These should eventually be consolidated into one canonical results log to avoid maintaining two sources of truth.
 
-### B. Q1–Q18 cross-check
+### B. Q1–Q19 cross-check
 
-The exploratory SQL file is present through Q18. The latest confirmed user-provided outputs should remain the source of truth for the results log. In particular, Q11–Q18 include online-order analysis, estimated financial contribution, city revenue ranking, and table-reservation analysis.
+The exploratory SQL analysis is now at Q19. The latest confirmed user-provided outputs should remain the source of truth for the results documentation. Q19 adds cost-band segmentation and compares average estimated revenue, contribution margin and rating.
 
 ### C. Naming/terminology consistency
 
-Check that `online_order_status`, `table_reservation_status`, estimated revenue, contribution margin, rating counts, and restaurant counts use the same definitions and labels across SQL, results logs, KPI definitions, Power BI documentation, and README.
+Check that `online_order_status`, `table_reservation_status`, cost bands, estimated revenue, contribution margin, rating counts, and restaurant counts use the same definitions and labels across SQL, results logs, KPI definitions, Power BI documentation, and README.
 
 ### D. Result correctness issue to preserve and investigate
 
@@ -40,7 +40,13 @@ Some supplied result tables contained a duplicated/mislabeled status label (for 
 
 The unit-economics analysis uses estimated orders/revenue and contribution margin derived from assumptions/model logic rather than observed transaction-level sales. This must remain explicit in the assumptions/limitations and interview explanation.
 
-### F. Power BI — intentionally deferred
+### F. Q19 schema lesson
+
+The first Q19 attempt referenced `cost_for_two_clean` while querying `zomato_unit_economics`. That column belongs to `zomato_restaurants_clean`; the actual unit-economics field is `COST_FOR_TWO`.
+
+The query was corrected after checking the table schema. This is retained as a relevant data-model/SQL learning point: verify the actual schema before assuming a column is available in another table.
+
+### G. Power BI — intentionally deferred
 
 The current `.pbix` and screenshots are **old working artifacts** and should not be treated as the current analytical output. Python EDA, validation and SQL analysis have since been updated.
 
@@ -48,7 +54,7 @@ The current `.pbix` and screenshots are **old working artifacts** and should not
 
 Therefore Power BI is **not considered a current pipeline failure**; it is an intentionally deferred stage.
 
-### G. README synchronization
+### H. README synchronization
 
 README should be treated as the final public-facing summary, not the working analysis log. It should be updated only after the SQL/Python layers are reconciled and the Power BI dashboard has been rebuilt from the finalized analysis.
 
@@ -71,7 +77,7 @@ SQL Data Quality Checks
   ↓
 SQL Restaurant / KPI Analysis
   ↓
-SQL Exploratory Analysis Q1–Q18
+SQL Exploratory Analysis Q1–Q19
   ↓
 Unit Economics
   ↓
@@ -82,7 +88,7 @@ Final Insights / README
 
 ## 4. Current project checkpoint
 
-**Completed:** raw data → Python profiling → cleaning → EDA → validation → MySQL → SQL exploratory analysis Q1–Q18 → results/learning documentation.
+**Completed:** raw data → Python profiling → cleaning → EDA → validation → MySQL → SQL exploratory analysis Q1–Q19 → results/learning documentation.
 
 **Deferred intentionally:** final Power BI rebuild and screenshots.
 
@@ -91,7 +97,7 @@ Final Insights / README
 ## 5. Next synchronization order
 
 1. Continue/complete useful intermediate-level SQL analysis.
-2. Reconcile the canonical Q1–Q18+ SQL outputs with the results documentation.
+2. Reconcile the canonical Q1–Q19+ SQL outputs with the results documentation.
 3. Consolidate duplicate result-log documentation.
 4. Reconcile KPI definitions and assumptions with the actual SQL formulas.
 5. Check Python outputs against the cleaned-table definitions used by SQL.
