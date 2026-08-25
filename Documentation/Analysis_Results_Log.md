@@ -105,6 +105,20 @@
 - **Useful finding if the grouping is confirmed:** The 111,310 group is approximately **₹18,903 higher in average estimated revenue** and **₹13,324.35 higher in average contribution margin** than the 113,210 group.
 - **Critical caveat:** These are estimated financial metrics and observational group comparisons. Do not state that online ordering causes the financial difference.
 
+### Q15 — Revenue Contribution by Online Ordering
+- **Status:** Completed and result recorded.
+- **Question:** How much total estimated revenue and contribution margin does each online-ordering group contribute?
+
+| Online order status | Restaurant count | Total estimated revenue | Total contribution margin | Revenue contribution | Contribution margin |
+|---|---:|---:|---:|---:|---:|
+| Online Order Available* | 111,310 | ₹5,359,759,821 | ₹4,117,075,690.36 | 61.81% | 60.58% |
+| Online Order Not Available | 113,210 | ₹3,311,280,216 | ₹2,678,901,304.71 | 38.19% | 39.42% |
+
+- **Data-quality note:** The supplied Q15 output again labels both rows `Online Order Not Available`. Based on Q11/Q13 and the matching restaurant counts, **111,310 is recorded as Online Order Available*** and 113,210 as Online Order Not Available. The original SQL output should still be checked once before final README publication.
+- **Useful finding:** The 111,310-restaurant group contributes **61.81% of total estimated revenue** and **60.58% of total contribution margin**, despite representing only **49.58% of restaurants**.
+- **Scale effect:** This shows that the financial picture is not simply a result of restaurant count. The 111,310 group has a materially higher estimated financial contribution per restaurant as also reflected by Q14.
+- **Interpretation caution:** These are estimated financial metrics and observational group comparisons. Do not claim that online ordering itself causes the higher contribution.
+
 ---
 
 ## Cross-Query Findings Worth Carrying Into the Final README
@@ -115,7 +129,8 @@
 4. **Cuisine dominance:** North Indian is the largest cuisine listing at about **9.2%** of restaurants; Q08 and Q10 reinforce the same pattern.
 5. **Online ordering is nationally balanced but geographically uneven:** 49.58% overall availability, but city adoption ranges from **15.73% to 72.93%**.
 6. **Online-order restaurants show a stronger customer profile:** 3.55 vs 3.39 average rating and 173 vs 115 average rating count, with slightly lower cost for two and higher table-reservation adoption.
-7. **Financial result requires label verification:** Q14 suggests a large financial difference between the two online-order groups, but the pasted output contains a duplicated group label and therefore should not become a headline README claim until verified.
+7. **Financial contribution differs materially by online-order group:** the 111,310-restaurant group represents 49.58% of restaurants but contributes **61.81% of estimated revenue** and **60.58% of estimated contribution margin**, pending final verification of the duplicated status label in Q14/Q15.
+8. **Financial result remains observational:** Q14/Q15 do not establish that online ordering causes higher revenue or margins; underlying estimates and potential confounders must be considered.
 
 ---
 
