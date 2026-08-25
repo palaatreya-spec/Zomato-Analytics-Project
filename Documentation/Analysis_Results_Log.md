@@ -208,19 +208,49 @@
 | Bakery, Fast Food | 2,405 | 1,663 | 69.15% | 3.32 | 54 |
 | Beverages, Cafe, Sandwich, Fast Food, Desserts | 603 | 564 | 93.53% | 3.25 | 48 |
 
-**Key observations:**
-- Among the supplied cuisine listings, **Desserts, Beverages** has the highest average rating at **3.74**, while **Burger, Fast Food** combines a high average rating (**3.71**) with very strong engagement (**331 average ratings**).
-- **Pizza, Fast Food** also shows strong engagement at **251 average ratings** and 85.99% rating coverage.
-- Large mainstream listings such as **North Indian (20,549 restaurants)** and **Fast Food (11,462)** have lower average ratings (3.38 and 3.39) and lower average rating counts (90 and 56) than several smaller/specialized listings.
-- Rating coverage varies widely across cuisine listings, so average ratings should not be compared without considering coverage and restaurant count.
-- The results suggest that cuisine mix may be associated with both customer engagement and rating performance, but the analysis does not establish causation.
+**Key observations:** Several specialized cuisine listings show stronger observed ratings and engagement than large mainstream listings. Burger, Fast Food has 3.71 average rating and 331 average ratings, while North Indian has 3.38 average rating and 90 average ratings. Treat this as association and consider sample size/coverage.
 
-**Interpretation caution:** Cuisine listings are not mutually exclusive, and some combinations have small sample sizes. High average ratings for small listings should therefore be treated cautiously.
+**Interpretation caution:** Cuisine listings are not mutually exclusive, and some combinations have small sample sizes.
 
 **README-worthy:** Yes — potentially useful for identifying cuisine segments associated with stronger observed ratings and engagement.
 
-### Q10 — Pending result record
-- **Status:** Result to be reconstructed from the completed SQL work.
+### Q10 — Most Popular Cuisine Listings
+- **Status:** Completed and result recorded.
+- **Question:** Which cuisine listings have the largest restaurant presence in the dataset?
+- **Output size:** Top 20 cuisine listings supplied in the conversation.
+
+| Cuisine listing | Restaurant count | % of restaurants |
+|---|---:|---:|
+| North Indian | 20,549 | 9.21% |
+| Fast Food | 11,462 | 5.14% |
+| North Indian, Chinese | 11,230 | 5.03% |
+| South Indian | 6,676 | 2.99% |
+| Bakery | 5,703 | 2.56% |
+| Chinese | 5,346 | 2.40% |
+| Street Food | 4,134 | 1.85% |
+| Bakery, Desserts | 3,297 | 1.48% |
+| Biryani | 2,791 | 1.25% |
+| Chinese, North Indian | 2,675 | 1.20% |
+| Pizza, Fast Food | 2,626 | 1.18% |
+| Bakery, Fast Food | 2,405 | 1.08% |
+| Desserts | 2,323 | 1.04% |
+| North Indian, Fast Food | 2,289 | 1.03% |
+| Mithai | 2,176 | 0.97% |
+| Cafe | 2,135 | 0.96% |
+| North Indian, Mughlai | 2,054 | 0.92% |
+| Beverages | 1,985 | 0.89% |
+| Fast Food, Beverages | 1,827 | 0.82% |
+| Ice Cream, Desserts | 1,603 | 0.72% |
+
+**Key observations:**
+- **North Indian is the most popular cuisine listing**, with 20,549 restaurants (9.21% of the supplied total used by this query).
+- Fast Food (5.14%) and North Indian, Chinese (5.03%) are the next largest listings.
+- The result reinforces that the restaurant market is heavily represented by North Indian, fast-food and multi-cuisine combinations.
+- Because cuisine listings can contain combinations, these should be interpreted as **listing popularity**, not mutually exclusive market-share categories.
+
+**Interpretation caution:** Q08 and Q10 are closely related. Q10 should be retained only if its distinct denominator/logic is useful for the final project; otherwise it may be treated as a supporting validation rather than a separate headline insight.
+
+**README-worthy:** Supporting analysis; likely not necessary as a separate headline finding because it overlaps substantially with Q08.
 
 ### Q11 — Pending result record
 - **Status:** Result to be reconstructed from the completed SQL work.
@@ -296,6 +326,7 @@ Only validated findings with actual recorded outputs should be promoted here.
 - Q07: Bawarchi in Hyderabad leads the top-20 most-reviewed list with 42,621 ratings; Bengaluru and Hyderabad are prominent among the highest-engagement restaurants, while online ordering and table reservation adoption are mixed.
 - Q08: North Indian is the most common cuisine listing at 20,549 restaurants (9.15%); cuisine combinations are common, and the `0` listing should be treated as a data-quality/missing-value category.
 - Q09: Several specialized cuisine listings show stronger observed ratings and engagement than large mainstream listings; Burger, Fast Food has 3.71 average rating and 331 average ratings, while North Indian has 3.38 average rating and 90 average ratings. Treat this as association and consider sample size/coverage.
+- Q10: North Indian is the largest cuisine listing by restaurant presence (20,549; 9.21% in this query), followed by Fast Food (11,462; 5.14%) and North Indian, Chinese (11,230; 5.03%). This largely validates Q08 and is better treated as supporting analysis than a separate headline finding.
 - Q14: Online-ordering groups show materially different average estimated financial metrics in the current analysis. Treat as an association, not causation.
 
 ---
