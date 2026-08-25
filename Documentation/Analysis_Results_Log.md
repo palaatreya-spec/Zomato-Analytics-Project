@@ -114,8 +114,25 @@
 
 **README-worthy:** Yes, potentially — useful for showing the overall rating landscape and supporting later segmentation.
 
-### Q05 — Pending result record
-- **Status:** Result to be reconstructed from the completed SQL work.
+### Q05 — Rating Band Distribution
+- **Status:** Completed and result recorded.
+- **Question:** How are rated restaurants distributed across broader rating bands?
+
+| Rating band | Restaurant count | % of rated restaurants |
+|---|---:|---:|
+| Below 2.5 | 629 | 0.43% |
+| 2.5 - 2.9 | 13,134 | 9.07% |
+| 3.0 - 3.4 | 55,638 | 38.44% |
+| 3.5 - 3.9 | 55,036 | 38.03% |
+| 4.0+ | 20,298 | 14.02% |
+
+**Key observations:**
+- **76.47%** of rated restaurants fall between **3.0 and 3.9**.
+- Only **0.43%** fall below 2.5.
+- **14.02%** of rated restaurants have a rating of 4.0 or above.
+- The distribution is therefore strongly centered in the mid-rating bands rather than at the extremes.
+
+**README-worthy:** Yes — stronger than the raw rating distribution for communicating the overall rating profile.
 
 ### Q06 — Pending result record
 - **Status:** Result to be reconstructed from the completed SQL work.
@@ -203,6 +220,7 @@ Only validated findings with actual recorded outputs should be promoted here.
 - Q02: Restaurant supply is geographically concentrated; Delhi NCR, Mumbai and Bengaluru account for approximately 37.7% of restaurant records.
 - Q03: City-level rating coverage varies substantially; major cities such as Mumbai and Hyderabad have around 71% coverage, while some smaller cities have little or no rating data. Average ratings should therefore be interpreted alongside coverage and sample size.
 - Q04: Ratings are concentrated around the 3.2–3.9 range, with 3.30 as the largest individual rating bucket at 8.98% of rated restaurants.
+- Q05: 76.47% of rated restaurants fall in the 3.0–3.9 rating bands, while only 0.43% fall below 2.5 and 14.02% are rated 4.0+.
 - Q14: Online-ordering groups show materially different average estimated financial metrics in the current analysis. Treat as an association, not causation.
 
 ---
