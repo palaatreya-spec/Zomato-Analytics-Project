@@ -4,29 +4,46 @@
 
 **Tools:** Python • Pandas • MySQL • SQL • Power BI
 
+## 📊 Project Completion
+
+**Current completion: ~70%**
+
+> Current checkpoint: **Raw data → Python profiling → cleaning → EDA → validation → MySQL → SQL analysis Q1–Q20 complete.**
+>
+> Power BI and final presentation are intentionally pending because the existing dashboard/screenshots are from an earlier version of the pipeline and will be rebuilt after the SQL stage.
+
 ---
 
 ## 📌 Project Overview
 
-This project analyzes restaurant-level data to understand **restaurant supply, ratings, pricing, cuisine mix and digital-ordering adoption** across cities in India.
+This project analyzes restaurant-level data to understand **restaurant supply, ratings, pricing, cuisine mix, digital-ordering adoption, table reservations and estimated unit-economics patterns** across cities in India.
 
 The dataset contains restaurant attributes such as restaurant name, city, cuisine, ratings, rating counts, listed cost-for-two, online ordering, table reservation and location information.
 
-The project is designed as a practical **entry-level Data Analyst portfolio project**, with the focus on data cleaning, SQL analysis, dashboarding and business interpretation.
+The project is designed as a practical **entry-level Data Analyst portfolio project**, with the focus on data cleaning, exploratory analysis, SQL business analysis, dashboarding and business interpretation.
 
-> **Important:** The dataset does not contain verified customer-level transactions or order revenue. Therefore, this project does not claim revenue, profit, customer lifetime value, retention or transaction-level analysis.
+> **Important:** The source dataset does not contain verified customer-level transactions or actual restaurant sales. Financial analysis in the later SQL stage uses **estimated unit-economics metrics** from the project dataset and must not be interpreted as verified Zomato revenue or profit.
 
 ---
 
 ## 🎯 Business Questions
 
-1. Which cities have the largest restaurant supply?
-2. How do average ratings differ across cities?
-3. How does listed cost-for-two vary across cities and price bands?
-4. Which cuisines have the largest restaurant presence?
-5. How common are online ordering and table reservations?
-6. Which cities show higher digital-ordering adoption?
-7. What data-quality issues need to be considered before analysis?
+The analysis progressively addresses questions around:
+
+1. Restaurant supply and geographic distribution
+2. Rating coverage and rating distribution
+3. Customer engagement through rating activity
+4. Highly reviewed restaurants
+5. Cuisine presence and cuisine-level performance
+6. Online-order adoption and city-level differences
+7. Online ordering vs restaurant characteristics
+8. Online ordering vs estimated financial performance
+9. City-level estimated financial performance
+10. Table-reservation availability and restaurant characteristics
+11. Cost bands vs estimated financial performance
+12. Delivery-only vs non-delivery-only restaurant performance
+
+The SQL stage currently contains **20 practical, interview-explainable exploratory questions** rather than extending the project with unnecessary complexity.
 
 ---
 
@@ -39,41 +56,32 @@ Python Source Profiling
     ↓
 Python Data Cleaning
     ↓
-Python Basic EDA
+Python EDA
     ↓
-Cleaned Dataset
+Python Validation
     ↓
-MySQL / SQL Analysis
+Cleaned / Validated Data
     ↓
-Power BI Dashboard
+MySQL Table Setup
     ↓
-Business Insights
-```
-
-### Python scripts
-
-```text
-Python/
-├── 01_source_profile.py
-├── 02_clean_restaurant_data.py
-└── 03_eda_analysis.py
-```
-
-### SQL scripts
-
-```text
-SQL/
-├── 01_Table_Setup.sql
-├── 02_Data_Quality_Checks.sql
-├── 03_Restaurant_Analysis.sql
-└── 04_KPI_Analysis.sql
+SQL Data Quality Checks
+    ↓
+SQL Business & Exploratory Analysis
+    ↓
+Q1–Q20 Complete ✅
+    ↓
+Power BI Rebuild ⏳
+    ↓
+New Screenshots ⏳
+    ↓
+Final Insights & Portfolio Presentation ⏳
 ```
 
 ---
 
 ## 🐍 Python Analysis
 
-Python is used for practical data-preparation and exploratory analysis:
+Python is used for practical data preparation, quality checks and exploratory analysis:
 
 - Reading and profiling the source CSV
 - Checking missing values and data types
@@ -82,8 +90,9 @@ Python is used for practical data-preparation and exploratory analysis:
 - Cleaning text fields
 - Splitting latitude and longitude
 - Creating basic data-quality flags
-- Calculating simple overall, city and cuisine summaries
-- Exporting cleaned and analytical datasets for further use
+- Calculating overall, city and cuisine summaries
+- Exporting cleaned and analytical datasets for SQL/BI use
+- Validating the cleaned output before downstream analysis
 
 The Python work intentionally uses straightforward **Pandas-based analysis** appropriate for an entry-level Data Analyst project.
 
@@ -91,57 +100,64 @@ The Python work intentionally uses straightforward **Pandas-based analysis** app
 
 ## 🗄️ SQL / MySQL Analysis
 
-The SQL analysis focuses on practical business questions using:
+The SQL stage has now been completed through **20 exploratory business questions**.
+
+The analysis uses practical SQL concepts including:
 
 - `SELECT` and `WHERE`
 - `CASE` statements
 - `GROUP BY` and `HAVING`
 - `ORDER BY`
 - `COUNT`, `SUM` and `AVG`
-- Basic percentage calculations
-- Simple data-quality checks
+- Percentage calculations
+- Conditional aggregation
+- Business segmentation using `CASE`
+- Window-function usage with `RANK()`
+- Schema validation when working across analysis tables
 
-### Main analyses
+### Main analysis areas
 
-- Restaurant count by city
-- Average rating by city
-- Pricing bands
-- Rating bands
-- Online-order and table-reservation adoption
-- Cuisine-level restaurant analysis
-- Overall and city-level KPIs
+- Restaurant distribution by city
+- City-level rating coverage and performance
+- Rating distribution and rating bands
+- Rating/customer-engagement relationships
+- Most-reviewed restaurants
+- Cuisine popularity and performance
+- Online-order availability and city adoption
+- Online ordering vs restaurant characteristics
+- Online ordering vs estimated financial performance
+- Revenue and contribution-margin comparisons
+- City-level estimated financial performance
+- City revenue ranking
+- Table-reservation availability vs restaurant characteristics
+- Cost-for-two bands vs estimated financial performance
+- Delivery-only vs non-delivery-only restaurant performance
 
-The SQL deliberately avoids unsupported revenue or customer metrics.
+The detailed SQL is maintained in:
+
+`SQL/05_Exploratory_Analysis.sql`
+
+The corresponding validated findings and interview-learning notes are maintained in the `Documentation/` folder.
+
+### Important financial limitation
+
+The unit-economics analysis uses **estimated revenue, estimated orders and contribution-margin fields available in the project dataset**. These are analytical estimates, not verified Zomato transaction or accounting figures.
 
 ---
 
-## 📊 Power BI Dashboard
+## 📊 Power BI Dashboard — Next Stage
 
-The dashboard is designed around a simple restaurant-market analysis rather than an overly complex BI model.
+The current Power BI dashboard and screenshots are **not treated as the final version**.
 
-### Main dashboard areas
+They were created before the Python/EDA/SQL pipeline was updated and will be rebuilt after the SQL analysis is finalized.
 
-**Market Overview**
-- Restaurant count
-- City count
-- Average rating
-- Average cost-for-two
-- Online-order adoption
-- Table-reservation adoption
+The next Power BI stage will:
 
-**City Analysis**
-- Restaurant supply by city
-- Average rating by city
-- Cost comparison
-- Digital-ordering adoption
-
-**Restaurant & Cuisine Analysis**
-- Rating distribution
-- Pricing bands
-- Cuisine presence
-- Cuisine rating comparison
-
-Interactive slicers can be used to explore cities, cuisines and restaurant characteristics.
+- Reconcile dashboard metrics with the finalized SQL definitions
+- Rebuild relevant KPIs and measures
+- Update visuals around the strongest validated findings
+- Replace outdated screenshots
+- Document the final dashboard model
 
 ---
 
@@ -156,8 +172,9 @@ Examples include:
 - Restaurant URLs are used as the restaurant-level identifier in the cleaned dataset.
 - Missing cuisine, rating and cost values are retained/flagged where appropriate rather than silently treated as valid values.
 - Coordinates are checked for basic geographic validity.
+- Service flags and text fields are normalized before analysis where required.
 
-The purpose of these checks is to make the analysis more reliable without introducing unnecessary modelling complexity.
+The project also uses validation checks to confirm that the cleaned data is suitable for downstream SQL and BI analysis.
 
 ---
 
@@ -168,31 +185,40 @@ This is a restaurant-level dataset, not a transaction database.
 Therefore it cannot reliably answer questions about:
 
 - Actual restaurant revenue
-- Restaurant profit
+- Actual restaurant profit
 - Customer lifetime value
 - Customer retention
 - Order frequency
-- Average order value
 - Monthly sales
 - Customer-level behaviour
 
 `Cost-for-two` is a **listed pricing field**, not restaurant revenue.
 
+Where the later unit-economics table is used, financial values are explicitly treated as **estimated analytical metrics** rather than verified business figures.
+
+Observational comparisons are interpreted as associations rather than causal relationships unless stronger evidence exists.
+
 ---
 
 ## 📚 Documentation
 
-Additional project notes are available in the `Documentation/` folder, including:
+The `Documentation/` folder contains the project's working knowledge base, including:
 
 - Business questions
 - Data dictionary
 - Source profile
-- EDA findings
 - Cleaning principles
+- EDA findings
 - Assumptions and limitations
+- SQL execution guidance
+- SQL learning notes
+- Analysis results log
+- Project journey
+- Pipeline synchronization notes
+- Power BI model documentation
 - Interview story
 
-The documentation is intentionally kept focused on the final project rather than the project's internal development history.
+The working documentation records only relevant project information: validated results, important findings, technical learning, data-quality problems, decisions, fixes, caveats and interview explanations.
 
 ---
 
@@ -209,13 +235,15 @@ Zomato-Analytics-Project/
 │   ├── 01_source_profile.py
 │   ├── 02_clean_restaurant_data.py
 │   ├── 03_eda_analysis.py
+│   ├── 04_validate_output.py
 │   └── run_pipeline.py
 │
 ├── SQL/
 │   ├── 01_Table_Setup.sql
 │   ├── 02_Data_Quality_Checks.sql
 │   ├── 03_Restaurant_Analysis.sql
-│   └── 04_KPI_Analysis.sql
+│   ├── 04_KPI_Analysis.sql
+│   └── 05_Exploratory_Analysis.sql
 │
 ├── PowerBI/
 ├── Screenshots/
@@ -226,13 +254,13 @@ Zomato-Analytics-Project/
 
 ---
 
-## 💡 Business Interpretation
+## 💡 Business Interpretation Approach
 
 The project follows a simple analytical approach:
 
-**Metric → Pattern → Interpretation → Business takeaway**
+**Business question → SQL/Python analysis → validated result → pattern → interpretation → business takeaway → caveat**
 
-For example, a city with a large restaurant base but lower online-order adoption can be identified as a market where restaurant supply and digital availability differ. This should be treated as an observation from the dataset, not as proof of a business opportunity without further information.
+For example, city-level analysis can show differences in restaurant supply, ratings, digital-order adoption and estimated financial performance. These are treated as observations from the dataset rather than proof of causation or verified business impact.
 
 ---
 
