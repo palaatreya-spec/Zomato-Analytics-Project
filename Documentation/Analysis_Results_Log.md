@@ -47,8 +47,34 @@
 
 **README-worthy:** Yes — useful for establishing geographic concentration of restaurant supply.
 
-### Q03 — Pending result record
-- **Status:** Result to be reconstructed from the completed SQL work.
+### Q03 — City-level restaurant performance
+- **Status:** Completed and result recorded.
+- **Question:** How does restaurant presence, rating coverage and rating engagement vary across cities?
+- **Output size:** 83 cities; the complete output was supplied in the conversation, so only decision-relevant observations are summarized here.
+
+**Selected results:**
+
+| City | Restaurant count | Rated restaurants | Rating coverage | Avg rating | Avg rating count |
+|---|---:|---:|---:|---:|---:|
+| Bengaluru | 20,283 | 13,590 | 67.00% | 3.61 | 139 |
+| Delhi NCR | 38,699 | 24,528 | 63.38% | 3.52 | 105 |
+| Mumbai | 25,692 | 18,133 | 70.58% | 3.51 | 141 |
+| Hyderabad | 12,393 | 8,777 | 70.82% | 3.46 | 153 |
+| Kolkata | 9,571 | 6,745 | 70.47% | 3.46 | 145 |
+| Pune | 15,430 | 9,785 | 63.42% | 3.45 | 98 |
+| Jaipur | 5,367 | 3,605 | 67.17% | 3.45 | 94 |
+| Ludhiana | 2,304 | 1,721 | 74.70% | 3.45 | 87 |
+| Palakkad | 139 | 0 | 0.00% | — | 0 |
+| Alappuzha | 226 | 0 | 0.00% | — | 0 |
+
+**Key observations:**
+- Among the major cities shown, **Bengaluru has the highest average rating (3.61)**.
+- **Mumbai and Hyderabad have high rating coverage**, at 70.58% and 70.82% respectively.
+- **Mumbai, Hyderabad and Kolkata show relatively high average rating counts**, indicating stronger rating engagement among rated restaurants.
+- Rating coverage varies substantially across cities. Some smaller locations have very limited rating availability; Palakkad and Alappuzha have no rated restaurants in this output.
+- Small cities with very few rated restaurants can show unstable average ratings, so city-level comparisons should consider rating coverage and sample size.
+
+**README-worthy:** Yes, potentially — especially for demonstrating that city performance should be evaluated using both rating quality and rating coverage rather than average rating alone.
 
 ### Q04 — Pending result record
 - **Status:** Result to be reconstructed from the completed SQL work.
@@ -140,6 +166,7 @@ Only validated findings with actual recorded outputs should be promoted here.
 
 - Q01: Dataset contains 224,520 restaurants across 83 cities, 2,500 areas and 19,675 cuisine values.
 - Q02: Restaurant supply is geographically concentrated; Delhi NCR, Mumbai and Bengaluru account for approximately 37.7% of restaurant records.
+- Q03: City-level rating coverage varies substantially; major cities such as Mumbai and Hyderabad have around 71% coverage, while some smaller cities have little or no rating data. Average ratings should therefore be interpreted alongside coverage and sample size.
 - Q14: Online-ordering groups show materially different average estimated financial metrics in the current analysis. Treat as an association, not causation.
 
 ---
