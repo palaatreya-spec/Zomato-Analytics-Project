@@ -119,6 +119,40 @@
 - **Scale effect:** This shows that the financial picture is not simply a result of restaurant count. The 111,310 group has a materially higher estimated financial contribution per restaurant as also reflected by Q14.
 - **Interpretation caution:** These are estimated financial metrics and observational group comparisons. Do not claim that online ordering itself causes the higher contribution.
 
+### Q16 — City-Level Financial Performance
+- **Status:** Completed and result recorded.
+- **Question:** Which cities show the strongest estimated financial performance per restaurant, and which cities contribute the most total estimated revenue and contribution margin?
+- **Method note:** Results were generated with a **minimum 500 restaurants per city** to avoid ranking very small cities against major markets.
+
+**Top cities by average estimated revenue per restaurant:**
+
+| City | Restaurant count | Avg estimated revenue | Avg contribution margin | Total estimated revenue | Total contribution margin |
+|---|---:|---:|---:|---:|---:|
+| Mumbai | 25,692 | ₹70,896 | ₹56,987.00 | ₹1,821,453,772 | ₹1,464,110,102.53 |
+| Bengaluru | 20,283 | ₹63,964 | ₹51,367.28 | ₹1,297,373,878 | ₹1,041,882,619.75 |
+| Kolkata | 9,571 | ₹56,602 | ₹44,085.30 | ₹541,737,349 | ₹421,940,374.91 |
+| Hyderabad | 12,393 | ₹54,216 | ₹41,542.68 | ₹671,898,922 | ₹514,838,457.70 |
+| Delhi NCR | 38,699 | ₹47,103 | ₹37,467.69 | ₹1,822,836,265 | ₹1,449,962,310.33 |
+| Pune | 15,430 | ₹42,755 | ₹33,786.13 | ₹659,709,925 | ₹521,319,953.25 |
+| Jaipur | 5,367 | ₹33,941 | ₹26,078.15 | ₹182,158,700 | ₹139,961,412.75 |
+| Chennai | 11,917 | ₹33,699 | ₹26,246.09 | ₹401,592,690 | ₹312,774,691.75 |
+| Chandigarh | 4,278 | ₹33,503 | ₹25,206.39 | ₹143,323,894 | ₹107,832,926.45 |
+| Ahmedabad | 6,432 | ₹28,665 | ₹21,417.52 | ₹184,370,735 | ₹137,757,513.00 |
+
+**Additional useful comparisons:**
+- **Mumbai** has the highest average estimated revenue (**₹70,896**) and highest average contribution margin (**₹56,987**) among the supplied cities.
+- **Delhi NCR** has the largest restaurant count (**38,699**) and the highest total estimated revenue in the supplied results (**₹1.823B**), narrowly ahead of Mumbai (**₹1.821B**).
+- **Mumbai** has the highest total contribution margin in the supplied results (**₹1.464B**), slightly ahead of Delhi NCR (**₹1.450B**).
+- **Bengaluru** is strong on both unit economics (₹63,964 average revenue) and scale (20,283 restaurants), generating approximately **₹1.297B** total estimated revenue.
+- **Kolkata** and **Hyderabad** also show strong average economics, with ₹56,602 and ₹54,216 average estimated revenue respectively.
+- There is a clear distinction between **market scale** and **per-restaurant economics**: Delhi NCR has the most restaurants, but Mumbai has substantially higher estimated revenue and contribution margin per restaurant.
+
+**Useful finding:** Mumbai appears to be the strongest city on **estimated financial performance per restaurant**, while Delhi NCR is the largest market by restaurant count and is marginally the largest by total estimated revenue. This makes Q16 useful for identifying the difference between **market size and unit economics**.
+
+**Interpretation caution:** These are estimated financial metrics from the project model, not audited city-level financial statements. Differences may reflect restaurant mix, pricing, cuisine, operating model or other factors.
+
+**README-worthy:** Yes — this is a strong new geographic/business-performance finding and does not duplicate the online-ordering analyses.
+
 ---
 
 ## Cross-Query Findings Worth Carrying Into the Final README
@@ -130,7 +164,8 @@
 5. **Online ordering is nationally balanced but geographically uneven:** 49.58% overall availability, but city adoption ranges from **15.73% to 72.93%**.
 6. **Online-order restaurants show a stronger customer profile:** 3.55 vs 3.39 average rating and 173 vs 115 average rating count, with slightly lower cost for two and higher table-reservation adoption.
 7. **Financial contribution differs materially by online-order group:** the 111,310-restaurant group represents 49.58% of restaurants but contributes **61.81% of estimated revenue** and **60.58% of estimated contribution margin**, pending final verification of the duplicated status label in Q14/Q15.
-8. **Financial result remains observational:** Q14/Q15 do not establish that online ordering causes higher revenue or margins; underlying estimates and potential confounders must be considered.
+8. **Market size vs unit economics:** Q16 shows that **Delhi NCR has the largest restaurant base**, while **Mumbai has the strongest estimated revenue and contribution margin per restaurant** among the supplied cities. Delhi NCR and Mumbai are nearly tied in total estimated revenue, despite their different per-restaurant economics.
+9. **Financial results are observational:** Q14–Q16 do not establish causation; the estimated financial metrics should be interpreted as modeled/analytical outputs rather than audited financial statements.
 
 ---
 
