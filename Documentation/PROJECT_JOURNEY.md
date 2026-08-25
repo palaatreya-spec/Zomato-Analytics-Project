@@ -52,6 +52,8 @@ The cleaned dataset is loaded into `zomato_restaurants_clean`.
 
 A separate `zomato_unit_economics` table is used later for estimated operational/financial analysis.
 
+A schema-validation lesson was captured during Q18: `zomato_restaurants_clean` uses `zomato_url` as its primary key and does not contain `restaurant_id`, while `zomato_unit_economics` contains `RESTAURANT_ID`. We therefore do not assume a join key without checking the actual schema.
+
 ## 7. Exploratory SQL Q1–Q18
 
 The exploratory analysis progressed from simple profiling to intermediate analyst-level SQL:
@@ -93,14 +95,47 @@ The queries introduced:
 
 The level is intentionally **intermediate/fresher interview level**, not advanced SQL.
 
-## 9. Important analytical caveat
+## 9. Important analytical caveats
 
 The original restaurant dataset does not contain verified transaction-level revenue or customer-level behaviour. Q14–Q18 use estimated metrics from `zomato_unit_economics`.
 
 Therefore the project should describe these as **estimated revenue/contribution-margin analysis**, not actual restaurant revenue or profit analysis.
 
-## 10. Current checkpoint
+Several outputs also require careful label validation. For example, supplied Q14/Q15 result tables duplicated the `Online Order Not Available` label even though the restaurant counts correspond to the available and unavailable groups. This is documented as a data-output labeling issue rather than silently treated as a new business finding.
+
+## 10. Power BI status
+
+The repository currently contains an earlier Power BI dashboard and screenshots, but these are **not considered the final project output**.
+
+The Python EDA/validation work and SQL pipeline have since evolved. The Power BI model, measures, visuals and screenshots will be corrected/rebuilt **after the SQL analysis is complete and the final findings are validated**.
+
+This avoids building the final dashboard on an outdated analytical pipeline.
+
+## 11. Documentation approach
+
+GitHub is being used as the project's persistent working record, not only as a code repository.
+
+Only useful/relevant information is documented:
+
+- meaningful project steps and decisions
+- problems that affected the workflow
+- how important problems were solved
+- SQL/Python learning points
+- validated results and business findings
+- assumptions and limitations
+- interview explanations
+- deferred work and next steps
+
+Routine conversation, repeated executions and irrelevant troubleshooting are intentionally not recorded.
+
+## 12. Current checkpoint
 
 **Completed:** raw data → Python profiling → cleaning → EDA → validation → MySQL → exploratory SQL Q1–Q18 → results and learning documentation.
 
-**Next:** continue with the next useful intermediate-level analytical question only when it adds a distinct interview-relevant SQL concept or business insight.
+**Deferred intentionally:** final Power BI rebuild and replacement screenshots.
+
+**Not yet final:** public README and final portfolio presentation.
+
+## 13. Next stage
+
+Continue with useful intermediate-level SQL questions only when they add a distinct business insight or interview-relevant SQL concept. After the SQL analysis is finalized, rebuild Power BI from the reconciled pipeline, replace outdated screenshots, and then finalize the README/interview story.
