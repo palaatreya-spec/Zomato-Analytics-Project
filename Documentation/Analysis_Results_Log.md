@@ -226,6 +226,43 @@ This keeps the project reproducible and makes it easier to revise SQL concepts l
 - **Interview explanation:** "I compared restaurants with and without table reservations using the operational and financial fields already available in the unit-economics table. The reservation group showed much higher observed ratings, engagement and estimated financial performance, but I would treat that as correlation because restaurant type and other factors could explain the difference."
 - **Portfolio status:** **KEEP.** This is a strong intermediate-level business comparison and is more useful than adding unnecessary SQL complexity.
 
+### Q19 — Restaurant Cost vs Estimated Financial Performance
+- **Question:** Do restaurants in higher cost-for-two bands show different estimated financial performance and average ratings?
+
+| Cost band | Restaurant count | Avg estimated revenue | Avg contribution margin | Avg rating |
+|---|---:|---:|---:|---:|
+| Under 300 | 76,739 | ₹2,678 | ₹1,211 | 3.39 |
+| 300 - 599 | 101,746 | ₹15,390 | ₹10,381 | 3.46 |
+| 600 - 999 | 29,529 | ₹66,170 | ₹50,496 | 3.57 |
+| 1000 - 1499 | 7,267 | ₹224,024 | ₹183,715 | 3.76 |
+| 1500+ | 5,591 | ₹593,412 | ₹506,202 | 3.95 |
+
+- **Useful finding:** Higher cost bands show progressively higher average estimated revenue, contribution margin and rating.
+- **Key comparison:** The 1500+ group has approximately **222×** the average estimated revenue and **418×** the average contribution margin of the Under 300 group.
+- **Interpretation:** There is a strong positive association between cost-for-two band and the observed financial/rating metrics.
+- **Caveat:** This is an observational comparison. It does **not** establish that higher pricing causes higher revenue or margin. Restaurant type, location, brand strength, demand and other factors may also influence the relationship.
+- **SQL concepts:** `CASE`, business segmentation, `GROUP BY`, `AVG`, `COUNT`, conditional ranges, ordered aggregation.
+- **Interview explanation:** "I segmented restaurants into cost bands and compared their average financial performance and ratings. The higher-cost groups showed substantially higher observed revenue and margin, but I treated this as an association rather than a causal relationship."
+- **Data-model lesson:** The first version of Q19 incorrectly referenced `cost_for_two_clean` while querying `zomato_unit_economics`. Schema verification showed that this table contains `COST_FOR_TWO`, so the query was corrected. This is a useful reminder to verify column availability when switching between the cleaned restaurant table and the unit-economics table.
+- **Portfolio status:** **KEEP.** Intermediate, business-oriented and interview-explainable.
+
+### Q20 — Delivery-Only Restaurants vs Characteristics & Financial Performance
+- **Question:** Do delivery-only restaurants have a different customer and estimated financial profile from restaurants that are not delivery-only?
+
+| Delivery status | Restaurant count | Avg rating | Avg rating count | Avg cost for two | Avg estimated revenue | Avg contribution margin |
+|---|---:|---:|---:|---:|---:|---:|
+| Not Delivery Only | 210,442 | 3.49 | 153 | ₹419 | ₹40,323 | ₹31,649.10 |
+| Delivery Only | 14,078 | 3.50 | 95 | ₹404 | ₹13,166 | ₹9,637.51 |
+
+- **Useful finding:** Delivery-only restaurants have almost the same average rating (**3.50 vs 3.49**) but substantially lower observed average rating activity (**95 vs 153**), estimated revenue (**₹13,166 vs ₹40,323**) and contribution margin (**₹9,637.51 vs ₹31,649.10**).
+- **Price difference:** Delivery-only restaurants have a slightly lower average cost for two (**₹404 vs ₹419**).
+- **Interpretation:** Delivery-only restaurants appear financially smaller in this dataset while maintaining nearly identical average ratings.
+- **Caveat:** This is an observational comparison using estimated financial metrics. It does **not** prove that delivery-only status causes lower revenue or margin.
+- **Data-quality caveat:** The `CASE` expression classifies normalized `true` as Delivery Only and everything else as Not Delivery Only. Unexpected values, blanks or NULLs would therefore fall into the latter group. This should be checked if the analysis is used in the final dashboard.
+- **SQL concepts:** `CASE`, `LOWER`, `TRIM`, `GROUP BY`, conditional `AVG`, grouped comparison.
+- **Interview explanation:** "I compared delivery-only and non-delivery-only restaurants across rating, engagement, price and estimated financial performance. Ratings were nearly identical, while the delivery-only group showed lower observed financial metrics."
+- **Portfolio status:** **KEEP.** Intermediate / fresher interview-explainable.
+
 ---
 
 ## Cross-Query Findings Worth Carrying Into the Final README
@@ -239,7 +276,8 @@ This keeps the project reproducible and makes it easier to revise SQL concepts l
 7. **Financial contribution is uneven across online-order groups:** the 111,310 group accounts for **61.81% of estimated revenue** and **60.58% of estimated contribution margin**, pending verification of the duplicated Q14/Q15 labels.
 8. **City economics vs scale:** Mumbai has the strongest estimated revenue per restaurant, while Delhi NCR has the largest restaurant footprint and slightly higher total estimated revenue.
 9. **Table reservation is a strong profile differentiator:** only about **2.95%** of restaurants have reservations in the financial dataset, yet that group shows substantially higher observed rating, engagement and financial metrics. This is an association, not a causal claim.
-10. **SQL skill progression:** Q17 introduces a practical `RANK()` window function without making the project unnecessarily advanced for a fresher-level analyst. Q18 returns to straightforward intermediate grouped comparison and emphasizes business interpretation.
+10. **Cost band relationship:** higher cost-for-two bands show progressively higher observed estimated revenue, contribution margin and rating.
+11. **Delivery-only profile:** delivery-only restaurants have nearly identical ratings to other restaurants but substantially lower observed estimated financial metrics and rating activity.
 
 ---
 
@@ -258,11 +296,15 @@ The project should remain **fresher-to-intermediate and interview-explainable**.
 - `JOIN` awareness and schema validation
 - Subqueries
 - Window function: `RANK() OVER()`
+- Business segmentation using `CASE`
+- Text normalization with `LOWER()` / `TRIM()`
 - Business interpretation and correlation-vs-causation reasoning
 - Data-quality checking before publishing conclusions
 
 ### Important schema lesson
 Never assume a join key from a table name or from an earlier query. Before joining tables, inspect the schema and identify the actual common key. In this project, `zomato_restaurants_clean` uses `zomato_url` as its primary key, while `zomato_unit_economics` has `RESTAURANT_ID`. Q18 showed that a join was unnecessary because the required fields already existed in the unit-economics table.
+
+Q19 reinforced the same principle at the column level: `cost_for_two_clean` belongs to the cleaned restaurant table, while `zomato_unit_economics` contains `COST_FOR_TWO`. The failed first attempt was corrected after checking the schema.
 
 ### Interview principle
 Every project query should be explainable in plain language:
@@ -276,10 +318,14 @@ Every project query should be explainable in plain language:
 - "Online ordering causes higher revenue."
 - "Table reservations increase revenue."
 - "Higher ratings cause more reviews."
+- "Higher cost causes higher revenue."
+- "Delivery-only status causes lower revenue."
 
 Instead use:
 - "Restaurants with online ordering **show higher observed** revenue/engagement."
 - "Reservation-enabled restaurants **are associated with** substantially higher observed financial metrics."
+- "Higher-cost bands **show higher observed** estimated financial metrics."
+- "Delivery-only restaurants **show lower observed** estimated financial metrics in this dataset."
 - "The analysis shows a relationship, but it does not establish causation."
 
 ### Documentation practice
