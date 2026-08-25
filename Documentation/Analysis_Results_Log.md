@@ -134,8 +134,27 @@
 
 **README-worthy:** Yes — stronger than the raw rating distribution for communicating the overall rating profile.
 
-### Q06 — Pending result record
-- **Status:** Result to be reconstructed from the completed SQL work.
+### Q06 — Rating vs Customer Engagement
+- **Status:** Completed and result recorded.
+- **Question:** Does customer engagement differ across restaurant rating bands?
+
+| Rating band | Restaurant count | Restaurants with reviews | Avg rating count | Avg positive rating count |
+|---|---:|---:|---:|---:|
+| Below 2.5 | 629 | 627 | 108 | 108 |
+| 2.5 - 2.9 | 13,134 | 12,908 | 45 | 45 |
+| 3.0 - 3.4 | 55,638 | 54,852 | 29 | 29 |
+| 3.5 - 3.9 | 55,036 | 54,026 | 138 | 141 |
+| 4.0+ | 20,298 | 19,984 | 570 | 579 |
+
+**Key observations:**
+- The **4.0+ band has the strongest customer engagement**, averaging 570 ratings and 579 positive ratings per restaurant in this output.
+- The **3.0–3.4 band has the lowest average rating count (29)** despite being the largest rating band by restaurant count.
+- Higher-rated restaurants, particularly the 4.0+ group, are associated with substantially more rating activity in this dataset.
+- The below-2.5 group also shows higher engagement than the 2.5–3.4 bands, so the relationship is not simply a straight increase across every rating band.
+
+**Interpretation caution:** This is an association between rating bands and observed engagement; it does not establish that higher ratings cause more reviews. Restaurant popularity, age, city, cuisine and other factors may influence both.
+
+**README-worthy:** Yes — potentially useful as a customer-engagement finding, with the causation caveat.
 
 ### Q07 — Pending result record
 - **Status:** Result to be reconstructed from the completed SQL work.
@@ -221,6 +240,7 @@ Only validated findings with actual recorded outputs should be promoted here.
 - Q03: City-level rating coverage varies substantially; major cities such as Mumbai and Hyderabad have around 71% coverage, while some smaller cities have little or no rating data. Average ratings should therefore be interpreted alongside coverage and sample size.
 - Q04: Ratings are concentrated around the 3.2–3.9 range, with 3.30 as the largest individual rating bucket at 8.98% of rated restaurants.
 - Q05: 76.47% of rated restaurants fall in the 3.0–3.9 rating bands, while only 0.43% fall below 2.5 and 14.02% are rated 4.0+.
+- Q06: The 4.0+ rating band has substantially higher observed rating activity (570 average ratings per restaurant) than the 3.0–3.4 band (29), indicating a strong association between high ratings and customer engagement in this dataset.
 - Q14: Online-ordering groups show materially different average estimated financial metrics in the current analysis. Treat as an association, not causation.
 
 ---
