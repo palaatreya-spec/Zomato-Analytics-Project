@@ -1,4 +1,4 @@
-# SQL Learning Notes — Exploratory Analysis Q1–Q18
+# SQL Learning Notes — Exploratory Analysis Q1–Q19
 
 ## Purpose
 
@@ -26,6 +26,7 @@ This file records the SQL concepts used in the exploratory analysis so the proje
 | 16 | City-level financial performance | `GROUP BY`, `SUM`, `AVG`, `HAVING` | Compare average and total financial metrics |
 | 17 | City ranking by restaurant revenue | subquery/derived table, `RANK() OVER` | First practical window-function use |
 | 18 | Table reservation vs restaurant characteristics | `CASE`, conditional `AVG`, grouping | Compare restaurant characteristics by reservation availability |
+| 19 | Restaurant cost vs estimated financial performance | `CASE`, grouped bands, `COUNT`, `AVG`, ordered band output | Segment restaurants by price level and compare estimated financial performance |
 
 ## Important concepts to understand
 
@@ -45,7 +46,7 @@ Used after grouping to keep sufficiently large groups. Examples include the city
 
 ### `CASE`
 
-Used to create business-friendly categories such as rating bands and online-order status.
+Used to create business-friendly categories such as rating bands, online-order status and the Q19 cost bands.
 
 ### Conditional aggregation
 
@@ -71,6 +72,18 @@ SUM(SUM(estimated_revenue)) OVER ()
 
 The inner `SUM` creates the group total and the window `SUM` calculates the overall total across those grouped results.
 
+### Business segmentation with `CASE`
+
+Q19 groups restaurants into cost bands before calculating average financial metrics. This is a practical analyst pattern: convert a continuous numeric field into interpretable business segments, then compare those segments.
+
+## Q19 — Schema lesson
+
+The first Q19 attempt failed because `cost_for_two_clean` belongs to `zomato_restaurants_clean`, while the query was written against `zomato_unit_economics`.
+
+The actual unit-economics column is `COST_FOR_TWO`. The query was corrected after checking the table schema.
+
+**Interview learning:** Always verify the schema of the table being queried instead of assuming a cleaned-table column name exists in another table.
+
 ## SQL difficulty level
 
 The current analysis is intentionally **intermediate/fresher interview level**, not advanced SQL. It demonstrates practical analyst skills without unnecessary complexity.
@@ -81,6 +94,7 @@ The most advanced concepts currently introduced are:
 - derived tables/subqueries
 - window functions (`RANK`)
 - percentage-of-total calculations
+- practical business segmentation with `CASE`
 
 ## Interview rule
 
@@ -90,4 +104,4 @@ Do not memorize the queries line by line. Be able to explain:
 
 ## Data-model caution
 
-Q14–Q18 use `zomato_unit_economics`, which contains estimated financial metrics. These are analytical estimates/model outputs, not verified transaction-level restaurant revenue or profit.
+Q14–Q19 use `zomato_unit_economics`, which contains estimated financial metrics. These are analytical estimates/model outputs, not verified transaction-level restaurant revenue or profit.
