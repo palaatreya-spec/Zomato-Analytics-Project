@@ -76,8 +76,43 @@
 
 **README-worthy:** Yes, potentially — especially for demonstrating that city performance should be evaluated using both rating quality and rating coverage rather than average rating alone.
 
-### Q04 — Pending result record
-- **Status:** Result to be reconstructed from the completed SQL work.
+### Q04 — Rating Distribution
+- **Status:** Completed and result recorded.
+- **Question:** How are restaurant ratings distributed across rated restaurants?
+- **Output size:** 32 rating values from 1.80 to 4.90; full output was supplied in the conversation.
+
+**Key distribution points:**
+
+| Rating | Restaurant count | % of rated restaurants |
+|---:|---:|---:|
+| 2.80 | 3,677 | 2.54% |
+| 2.90 | 5,604 | 3.87% |
+| 3.00 | 7,876 | 5.44% |
+| 3.10 | 9,650 | 6.67% |
+| 3.20 | 12,220 | 8.44% |
+| 3.30 | 12,991 | 8.98% |
+| 3.40 | 12,901 | 8.91% |
+| 3.50 | 12,578 | 8.69% |
+| 3.60 | 12,206 | 8.43% |
+| 3.70 | 11,411 | 7.88% |
+| 3.80 | 10,194 | 7.04% |
+| 3.90 | 8,647 | 5.97% |
+| 4.00 | 6,764 | 4.67% |
+| 4.10 | 4,825 | 3.33% |
+| 4.20 | 3,290 | 2.27% |
+| 4.30 | 2,246 | 1.55% |
+| 4.40 | 1,370 | 0.95% |
+| 4.50 | 806 | 0.56% |
+| 4.60 | 474 | 0.33% |
+| 4.70 | 253 | 0.17% |
+| 4.80 | 138 | 0.10% |
+| 4.90 | 132 | 0.09% |
+
+**Key observation:** Ratings are concentrated around the **3.2–3.9 range**, with the largest individual rating bucket at **3.30 (8.98%)**, followed closely by 3.40 (8.91%) and 3.50 (8.69%). Very high ratings are comparatively uncommon: ratings of 4.50 and above each represent less than 1% individually.
+
+**Interpretation caution:** This describes the distribution of recorded ratings; it does not imply that the underlying restaurants are objectively of a particular quality level. Rating availability and platform/user behavior can influence the observed distribution.
+
+**README-worthy:** Yes, potentially — useful for showing the overall rating landscape and supporting later segmentation.
 
 ### Q05 — Pending result record
 - **Status:** Result to be reconstructed from the completed SQL work.
@@ -167,6 +202,7 @@ Only validated findings with actual recorded outputs should be promoted here.
 - Q01: Dataset contains 224,520 restaurants across 83 cities, 2,500 areas and 19,675 cuisine values.
 - Q02: Restaurant supply is geographically concentrated; Delhi NCR, Mumbai and Bengaluru account for approximately 37.7% of restaurant records.
 - Q03: City-level rating coverage varies substantially; major cities such as Mumbai and Hyderabad have around 71% coverage, while some smaller cities have little or no rating data. Average ratings should therefore be interpreted alongside coverage and sample size.
+- Q04: Ratings are concentrated around the 3.2–3.9 range, with 3.30 as the largest individual rating bucket at 8.98% of rated restaurants.
 - Q14: Online-ordering groups show materially different average estimated financial metrics in the current analysis. Treat as an association, not causation.
 
 ---
