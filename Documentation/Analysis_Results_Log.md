@@ -50,7 +50,7 @@
 ### Q03 — City-level restaurant performance
 - **Status:** Completed and result recorded.
 - **Question:** How does restaurant presence, rating coverage and rating engagement vary across cities?
-- **Output size:** 83 cities; the complete output was supplied in the conversation, so only decision-relevant observations are summarized here.
+- **Output size:** 83 cities; only decision-relevant observations are summarized here.
 
 **Selected results:**
 
@@ -67,52 +67,18 @@
 | Palakkad | 139 | 0 | 0.00% | — | 0 |
 | Alappuzha | 226 | 0 | 0.00% | — | 0 |
 
-**Key observations:**
-- Among the major cities shown, **Bengaluru has the highest average rating (3.61)**.
-- **Mumbai and Hyderabad have high rating coverage**, at 70.58% and 70.82% respectively.
-- **Mumbai, Hyderabad and Kolkata show relatively high average rating counts**, indicating stronger rating engagement among rated restaurants.
-- Rating coverage varies substantially across cities. Some smaller locations have very limited rating availability; Palakkad and Alappuzha have no rated restaurants in this output.
-- Small cities with very few rated restaurants can show unstable average ratings, so city-level comparisons should consider rating coverage and sample size.
+**Key observations:** Bengaluru has the highest average rating among the major cities shown (3.61). Mumbai and Hyderabad have high rating coverage, while some smaller locations have little or no rating data. City comparisons should consider rating coverage and sample size.
 
-**README-worthy:** Yes, potentially — especially for demonstrating that city performance should be evaluated using both rating quality and rating coverage rather than average rating alone.
+**README-worthy:** Yes.
 
 ### Q04 — Rating Distribution
 - **Status:** Completed and result recorded.
 - **Question:** How are restaurant ratings distributed across rated restaurants?
-- **Output size:** 32 rating values from 1.80 to 4.90; full output was supplied in the conversation.
+- **Output size:** 32 rating values from 1.80 to 4.90.
 
-**Key distribution points:**
+**Key observation:** Ratings are concentrated around the **3.2–3.9 range**, with the largest individual rating bucket at **3.30 (8.98%)**. Very high ratings are comparatively uncommon.
 
-| Rating | Restaurant count | % of rated restaurants |
-|---:|---:|---:|
-| 2.80 | 3,677 | 2.54% |
-| 2.90 | 5,604 | 3.87% |
-| 3.00 | 7,876 | 5.44% |
-| 3.10 | 9,650 | 6.67% |
-| 3.20 | 12,220 | 8.44% |
-| 3.30 | 12,991 | 8.98% |
-| 3.40 | 12,901 | 8.91% |
-| 3.50 | 12,578 | 8.69% |
-| 3.60 | 12,206 | 8.43% |
-| 3.70 | 11,411 | 7.88% |
-| 3.80 | 10,194 | 7.04% |
-| 3.90 | 8,647 | 5.97% |
-| 4.00 | 6,764 | 4.67% |
-| 4.10 | 4,825 | 3.33% |
-| 4.20 | 3,290 | 2.27% |
-| 4.30 | 2,246 | 1.55% |
-| 4.40 | 1,370 | 0.95% |
-| 4.50 | 806 | 0.56% |
-| 4.60 | 474 | 0.33% |
-| 4.70 | 253 | 0.17% |
-| 4.80 | 138 | 0.10% |
-| 4.90 | 132 | 0.09% |
-
-**Key observation:** Ratings are concentrated around the **3.2–3.9 range**, with the largest individual rating bucket at **3.30 (8.98%)**, followed closely by 3.40 (8.91%) and 3.50 (8.69%). Very high ratings are comparatively uncommon: ratings of 4.50 and above each represent less than 1% individually.
-
-**Interpretation caution:** This describes the distribution of recorded ratings; it does not imply that the underlying restaurants are objectively of a particular quality level. Rating availability and platform/user behavior can influence the observed distribution.
-
-**README-worthy:** Yes, potentially — useful for showing the overall rating landscape and supporting later segmentation.
+**README-worthy:** Yes, potentially.
 
 ### Q05 — Rating Band Distribution
 - **Status:** Completed and result recorded.
@@ -126,13 +92,9 @@
 | 3.5 - 3.9 | 55,036 | 38.03% |
 | 4.0+ | 20,298 | 14.02% |
 
-**Key observations:**
-- **76.47%** of rated restaurants fall between **3.0 and 3.9**.
-- Only **0.43%** fall below 2.5.
-- **14.02%** of rated restaurants have a rating of 4.0 or above.
-- The distribution is therefore strongly centered in the mid-rating bands rather than at the extremes.
+**Key observations:** **76.47%** of rated restaurants fall between **3.0 and 3.9**; only 0.43% fall below 2.5; 14.02% are rated 4.0+.
 
-**README-worthy:** Yes — stronger than the raw rating distribution for communicating the overall rating profile.
+**README-worthy:** Yes.
 
 ### Q06 — Rating vs Customer Engagement
 - **Status:** Completed and result recorded.
@@ -146,22 +108,18 @@
 | 3.5 - 3.9 | 55,036 | 54,026 | 138 | 141 |
 | 4.0+ | 20,298 | 19,984 | 570 | 579 |
 
-**Key observations:**
-- The **4.0+ band has the strongest customer engagement**, averaging 570 ratings and 579 positive ratings per restaurant in this output.
-- The **3.0–3.4 band has the lowest average rating count (29)** despite being the largest rating band by restaurant count.
-- Higher-rated restaurants, particularly the 4.0+ group, are associated with substantially more rating activity in this dataset.
-- The below-2.5 group also shows higher engagement than the 2.5–3.4 bands, so the relationship is not simply a straight increase across every rating band.
+**Key observations:** The **4.0+ band has the strongest customer engagement**, averaging 570 ratings per restaurant, while the 3.0–3.4 band averages only 29. The relationship is not perfectly linear because the below-2.5 group also has relatively high engagement.
 
-**Interpretation caution:** This is an association between rating bands and observed engagement; it does not establish that higher ratings cause more reviews. Restaurant popularity, age, city, cuisine and other factors may influence both.
+**Interpretation caution:** Association only; this does not establish that higher ratings cause more reviews.
 
-**README-worthy:** Yes — potentially useful as a customer-engagement finding, with the causation caveat.
+**README-worthy:** Yes, potentially.
 
 ### Q07 — Most Reviewed Restaurants
 - **Status:** Completed and result recorded.
 - **Question:** Which restaurants have the highest number of recorded ratings/reviews, and what characteristics do they have?
 - **Output size:** Top 20 restaurants.
 
-**Top results:**
+**Selected top results:**
 
 | Restaurant | City | Rating | Rating count | Cost for two | Online order | Table reservation |
 |---|---|---:|---:|---:|---:|---:|
@@ -176,18 +134,54 @@
 | Shah Ghouse Hotel & Restaurant | Hyderabad | 4.20 | 12,514 | ₹800 | Yes | No |
 | Peter Cat | Kolkata | 4.20 | 11,917 | ₹1,200 | Yes | No |
 
+**Key observations:** Bawarchi in Hyderabad leads with **42,621 ratings**. Bengaluru and Hyderabad are prominent among highly reviewed restaurants. Online ordering and table reservations are mixed.
+
+**Interpretation caution:** Rating count represents observed engagement, not revenue or profitability.
+
+**README-worthy:** Potentially.
+
+### Q08 — Most Common Cuisine Listings
+- **Status:** Completed and result recorded.
+- **Question:** Which cuisine categories/listings are most frequently represented across restaurants?
+- **Output size:** Top 25 cuisine listings supplied in the conversation.
+
+| Cuisine listing | Restaurant count | % of restaurants |
+|---|---:|---:|
+| North Indian | 20,549 | 9.15% |
+| Fast Food | 11,462 | 5.11% |
+| North Indian, Chinese | 11,230 | 5.00% |
+| South Indian | 6,676 | 2.97% |
+| Bakery | 5,703 | 2.54% |
+| Chinese | 5,346 | 2.38% |
+| Street Food | 4,134 | 1.84% |
+| Bakery, Desserts | 3,297 | 1.47% |
+| Biryani | 2,791 | 1.24% |
+| Chinese, North Indian | 2,675 | 1.19% |
+| Pizza, Fast Food | 2,626 | 1.17% |
+| Bakery, Fast Food | 2,405 | 1.07% |
+| Desserts | 2,323 | 1.03% |
+| North Indian, Fast Food | 2,289 | 1.02% |
+| Mithai | 2,176 | 0.97% |
+| Cafe | 2,135 | 0.95% |
+| North Indian, Mughlai | 2,054 | 0.91% |
+| Beverages | 1,985 | 0.88% |
+| Fast Food, Beverages | 1,827 | 0.81% |
+| Ice Cream, Desserts | 1,603 | 0.71% |
+| Mithai, Street Food | 1,547 | 0.69% |
+| Ice Cream | 1,512 | 0.67% |
+| Chinese, Fast Food | 1,461 | 0.65% |
+| North Indian, Chinese, Fast Food | 1,412 | 0.63% |
+| 0 | 1,330 | 0.59% |
+
 **Key observations:**
-- **Bawarchi (Hyderabad)** is the most-reviewed restaurant in the result with **42,621 ratings** and a **4.50 rating**.
-- The top-reviewed restaurants generally have strong ratings, with many above **4.0**, suggesting that highly reviewed restaurants can also have strong customer ratings.
-- **Bengaluru and Hyderabad are prominent among the top-reviewed restaurants**, indicating strong customer engagement in these markets.
-- Online ordering and table reservations are mixed among the most-reviewed restaurants, so neither feature is universally present among the top-engagement restaurants.
+- **North Indian is the most common cuisine listing**, appearing for 20,549 restaurants (9.15%).
+- Fast Food and North Indian–Chinese combinations are also highly prevalent.
+- Multi-cuisine listings are common, so listings are not mutually exclusive categories.
+- The `0` listing should be treated as a **data-quality/missing-value category**, not as a genuine cuisine.
 
-**Interpretation caution:** This query identifies restaurants with the highest recorded rating counts; rating count should not be treated as a direct measure of revenue or profitability.
+**Interpretation caution:** These are cuisine listings, not mutually exclusive cuisine categories.
 
-**README-worthy:** Potentially — useful for identifying high-engagement restaurant examples and supporting city/customer-engagement analysis.
-
-### Q08 — Pending result record
-- **Status:** Result to be reconstructed from the completed SQL work.
+**README-worthy:** Potentially useful for understanding cuisine-market composition and motivating cuisine normalization.
 
 ### Q09 — Pending result record
 - **Status:** Result to be reconstructed from the completed SQL work.
@@ -217,11 +211,9 @@
 
 **Key observation:** Restaurants without online ordering show higher average estimated revenue and contribution margin in this dataset.
 
-**Interpretation caution:** This is an observed association, not evidence that online ordering causes lower revenue or margin. Restaurant type, city, pricing and other characteristics may differ between the groups.
+**Interpretation caution:** This is an observed association, not evidence that online ordering causes lower revenue or margin.
 
-**README-worthy:** Yes, potentially — if consistent with the final validated analysis.
-
----
+**README-worthy:** Yes, potentially.
 
 ### Q15 — Revenue Contribution by Online Ordering
 - **Status:** Planned; run and record result before proceeding.
@@ -269,6 +261,7 @@ Only validated findings with actual recorded outputs should be promoted here.
 - Q05: 76.47% of rated restaurants fall in the 3.0–3.9 rating bands, while only 0.43% fall below 2.5 and 14.02% are rated 4.0+.
 - Q06: The 4.0+ rating band has substantially higher observed rating activity (570 average ratings per restaurant) than the 3.0–3.4 band (29), indicating a strong association between high ratings and customer engagement in this dataset.
 - Q07: Bawarchi in Hyderabad leads the top-20 most-reviewed list with 42,621 ratings; Bengaluru and Hyderabad are prominent among the highest-engagement restaurants, while online ordering and table reservation adoption are mixed.
+- Q08: North Indian is the most common cuisine listing at 20,549 restaurants (9.15%); cuisine combinations are common, and the `0` listing should be treated as a data-quality/missing-value category.
 - Q14: Online-ordering groups show materially different average estimated financial metrics in the current analysis. Treat as an association, not causation.
 
 ---
