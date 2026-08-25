@@ -401,3 +401,41 @@ SELECT
 FROM zomato_unit_economics
 GROUP BY table_reservation
 ORDER BY table_reservation DESC;
+
+/* ============================================================
+   19. Restaurant Cost vs Estimated Financial Performance
+   ============================================================ */
+
+SELECT
+    CASE
+        WHEN COST_FOR_TWO < 300 THEN 'Under 300'
+        WHEN COST_FOR_TWO BETWEEN 300 AND 599 THEN '300 - 599'
+        WHEN COST_FOR_TWO BETWEEN 600 AND 999 THEN '600 - 999'
+        WHEN COST_FOR_TWO BETWEEN 1000 AND 1499 THEN '1000 - 1499'
+        ELSE '1500+'
+    END AS cost_band,
+
+    COUNT(*) AS restaurant_count,
+
+    ROUND(AVG(ESTIMATED_REVENUE), 0) AS avg_estimated_revenue,
+
+    ROUND(AVG(CONTRIBUTION_MARGIN), 0) AS avg_contribution_margin,
+
+    ROUND(AVG(RATING), 2) AS avg_rating
+
+FROM zomato_unit_economics
+
+WHERE COST_FOR_TWO IS NOT NULL
+  AND COST_FOR_TWO > 0
+
+GROUP BY
+    CASE
+        WHEN COST_FOR_TWO < 300 THEN 'Under 300'
+        WHEN COST_FOR_TWO BETWEEN 300 AND 599 THEN '300 - 599'
+        WHEN COST_FOR_TWO BETWEEN 600 AND 999 THEN '600 - 999'
+        WHEN COST_FOR_TWO BETWEEN 1000 AND 1499 THEN '1000 - 1499'
+        ELSE '1500+'
+    END
+
+ORDER BY
+    MIN(COST_FOR_TWO);
