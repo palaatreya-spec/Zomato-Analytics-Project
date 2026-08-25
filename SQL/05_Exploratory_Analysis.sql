@@ -23,27 +23,20 @@ FROM zomato_restaurants_clean;
 SELECT
     city,
     COUNT(*) AS restaurant_count,
-    ROUND(
-        COUNT(*) * 100.0 /
-        (SELECT COUNT(*) FROM zomato_restaurants_clean),
-        2
-    ) AS percentage_of_total
+    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM zomato_restaurants_clean), 2) AS percentage_of_total
 FROM zomato_restaurants_clean
 GROUP BY city
 ORDER BY restaurant_count DESC;
 
 /* ============================================================
--- 3. City-level restaurant performance
+   3. City-level restaurant performance
    ============================================================ */
 
 SELECT
     city,
     COUNT(*) AS restaurant_count,
     COUNT(rating_clean) AS rated_restaurants,
-    ROUND(
-        COUNT(rating_clean) * 100.0 / COUNT(*),
-        2
-    ) AS rating_coverage_pct,
+    ROUND(COUNT(rating_clean) * 100.0 / COUNT(*), 2) AS rating_coverage_pct,
     ROUND(AVG(rating_clean), 2) AS avg_rating,
     ROUND(AVG(rating_count), 0) AS avg_rating_count,
     SUM(has_rating = 1) AS restaurants_with_rating
@@ -59,12 +52,7 @@ ORDER BY avg_rating DESC;
 SELECT
     rating_clean,
     COUNT(*) AS restaurant_count,
-    ROUND(
-        COUNT(*) * 100.0 /
-        (SELECT COUNT(rating_clean)
-         FROM zomato_restaurants_clean),
-        2
-    ) AS percentage_of_rated_restaurants
+    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(rating_clean) FROM zomato_restaurants_clean), 2) AS percentage_of_rated_restaurants
 FROM zomato_restaurants_clean
 WHERE rating_clean IS NOT NULL
 GROUP BY rating_clean
@@ -83,22 +71,16 @@ SELECT
         WHEN rating_clean >= 4.0 THEN '4.0+'
     END AS rating_band,
     COUNT(*) AS restaurant_count,
-    ROUND(
-        COUNT(*) * 100.0 /
-        (SELECT COUNT(rating_clean)
-         FROM zomato_restaurants_clean),
-        2
-    ) AS percentage_of_rated_restaurants
+    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(rating_clean) FROM zomato_restaurants_clean), 2) AS percentage_of_rated_restaurants
 FROM zomato_restaurants_clean
 WHERE rating_clean IS NOT NULL
-GROUP BY
-    CASE
-        WHEN rating_clean < 2.5 THEN 'Below 2.5'
-        WHEN rating_clean < 3.0 THEN '2.5 - 2.9'
-        WHEN rating_clean < 3.5 THEN '3.0 - 3.4'
-        WHEN rating_clean < 4.0 THEN '3.5 - 3.9'
-        WHEN rating_clean >= 4.0 THEN '4.0+'
-    END
+GROUP BY CASE
+    WHEN rating_clean < 2.5 THEN 'Below 2.5'
+    WHEN rating_clean < 3.0 THEN '2.5 - 2.9'
+    WHEN rating_clean < 3.5 THEN '3.0 - 3.4'
+    WHEN rating_clean < 4.0 THEN '3.5 - 3.9'
+    WHEN rating_clean >= 4.0 THEN '4.0+'
+END
 ORDER BY MIN(rating_clean);
 
 /* ============================================================
@@ -114,29 +96,18 @@ SELECT
         ELSE '4.0+'
     END AS rating_band,
     COUNT(*) AS restaurant_count,
-    COUNT(
-        CASE
-            WHEN rating_count > 0 THEN 1
-        END
-    ) AS restaurants_with_reviews,
+    COUNT(CASE WHEN rating_count > 0 THEN 1 END) AS restaurants_with_reviews,
     ROUND(AVG(rating_count), 0) AS avg_rating_count,
-    ROUND(
-        AVG(
-            CASE
-                WHEN rating_count > 0 THEN rating_count
-            END
-        ), 0
-    ) AS avg_positive_rating_count
+    ROUND(AVG(CASE WHEN rating_count > 0 THEN rating_count END), 0) AS avg_positive_rating_count
 FROM zomato_restaurants_clean
 WHERE rating_clean IS NOT NULL
-GROUP BY
-    CASE
-        WHEN rating_clean < 2.5 THEN 'Below 2.5'
-        WHEN rating_clean < 3.0 THEN '2.5 - 2.9'
-        WHEN rating_clean < 3.5 THEN '3.0 - 3.4'
-        WHEN rating_clean < 4.0 THEN '3.5 - 3.9'
-        ELSE '4.0+'
-    END
+GROUP BY CASE
+    WHEN rating_clean < 2.5 THEN 'Below 2.5'
+    WHEN rating_clean < 3.0 THEN '2.5 - 2.9'
+    WHEN rating_clean < 3.5 THEN '3.0 - 3.4'
+    WHEN rating_clean < 4.0 THEN '3.5 - 3.9'
+    ELSE '4.0+'
+END
 ORDER BY MIN(rating_clean);
 
 /* ============================================================
@@ -144,14 +115,7 @@ ORDER BY MIN(rating_clean);
    ============================================================ */
 
 SELECT
-    name,
-    city,
-    area,
-    rating_clean,
-    rating_count,
-    cost_for_two_clean,
-    online_order,
-    table_reservation
+    name, city, area, rating_clean, rating_count, cost_for_two_clean, online_order, table_reservation
 FROM zomato_restaurants_clean
 WHERE rating_clean IS NOT NULL
   AND rating_count > 0
@@ -165,14 +129,7 @@ LIMIT 20;
 SELECT
     cuisine,
     COUNT(*) AS restaurant_count,
-    ROUND(
-        COUNT(*) * 100.0 /
-        (SELECT COUNT(*)
-         FROM zomato_restaurants_clean
-         WHERE cuisine IS NOT NULL
-           AND TRIM(cuisine) <> ''),
-        2
-    ) AS percentage_of_restaurants
+    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM zomato_restaurants_clean WHERE cuisine IS NOT NULL AND TRIM(cuisine) <> ''), 2) AS percentage_of_restaurants
 FROM zomato_restaurants_clean
 WHERE cuisine IS NOT NULL
   AND TRIM(cuisine) <> ''
@@ -188,16 +145,9 @@ SELECT
     cuisine,
     COUNT(*) AS restaurant_count,
     COUNT(rating_clean) AS rated_restaurants,
-    ROUND(
-        COUNT(rating_clean) * 100.0 / COUNT(*),
-        2
-    ) AS rating_coverage_pct,
+    ROUND(COUNT(rating_clean) * 100.0 / COUNT(*), 2) AS rating_coverage_pct,
     ROUND(AVG(rating_clean), 2) AS avg_rating,
-    ROUND(AVG(
-        CASE
-            WHEN rating_count > 0 THEN rating_count
-        END
-    ), 0) AS avg_rating_count
+    ROUND(AVG(CASE WHEN rating_count > 0 THEN rating_count END), 0) AS avg_rating_count
 FROM zomato_restaurants_clean
 WHERE cuisine IS NOT NULL
   AND TRIM(cuisine) <> ''
@@ -213,15 +163,7 @@ ORDER BY avg_rating DESC;
 SELECT
     cuisine,
     COUNT(*) AS restaurant_count,
-    ROUND(
-        COUNT(*) * 100.0 /
-        (SELECT COUNT(*)
-         FROM zomato_restaurants_clean
-         WHERE cuisine IS NOT NULL
-           AND TRIM(cuisine) <> ''
-           AND cuisine <> '0'),
-        2
-    ) AS percentage_of_restaurants
+    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM zomato_restaurants_clean WHERE cuisine IS NOT NULL AND TRIM(cuisine) <> '' AND cuisine <> '0'), 2) AS percentage_of_restaurants
 FROM zomato_restaurants_clean
 WHERE cuisine IS NOT NULL
   AND TRIM(cuisine) <> ''
@@ -236,16 +178,9 @@ LIMIT 20;
    ============================================================ */
 
 SELECT
-    CASE
-        WHEN online_order = 1 THEN 'Online Order Available'
-        ELSE 'Online Order Not Available'
-    END AS online_order_status,
+    CASE WHEN online_order = 1 THEN 'Online Order Available' ELSE 'Online Order Not Available' END AS online_order_status,
     COUNT(*) AS restaurant_count,
-    ROUND(
-        COUNT(*) * 100.0 /
-        (SELECT COUNT(*) FROM zomato_restaurants_clean),
-        2
-    ) AS percentage_of_restaurants
+    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM zomato_restaurants_clean), 2) AS percentage_of_restaurants
 FROM zomato_restaurants_clean
 GROUP BY online_order
 ORDER BY restaurant_count DESC;
@@ -258,10 +193,7 @@ SELECT
     city,
     COUNT(*) AS restaurant_count,
     SUM(online_order = 1) AS online_order_restaurants,
-    ROUND(
-        SUM(online_order = 1) * 100.0 / COUNT(*),
-        2
-    ) AS online_order_pct
+    ROUND(SUM(online_order = 1) * 100.0 / COUNT(*), 2) AS online_order_pct
 FROM zomato_restaurants_clean
 GROUP BY city
 HAVING COUNT(*) >= 500
@@ -272,25 +204,12 @@ ORDER BY online_order_pct DESC;
    ============================================================ */
 
 SELECT
-    CASE
-        WHEN online_order = 1 THEN 'Online Order Available'
-        ELSE 'Online Order Not Available'
-    END AS online_order_status,
+    CASE WHEN online_order = 1 THEN 'Online Order Available' ELSE 'Online Order Not Available' END AS online_order_status,
     COUNT(*) AS restaurant_count,
     ROUND(AVG(rating_clean), 2) AS avg_rating,
-    ROUND(
-        AVG(
-            CASE
-                WHEN rating_count > 0 THEN rating_count
-            END
-        ),
-        0
-    ) AS avg_rating_count,
+    ROUND(AVG(CASE WHEN rating_count > 0 THEN rating_count END), 0) AS avg_rating_count,
     ROUND(AVG(cost_for_two_clean), 0) AS avg_cost_for_two,
-    ROUND(
-        SUM(table_reservation = 1) * 100.0 / COUNT(*),
-        2
-    ) AS table_reservation_pct
+    ROUND(SUM(table_reservation = 1) * 100.0 / COUNT(*), 2) AS table_reservation_pct
 FROM zomato_restaurants_clean
 GROUP BY online_order
 ORDER BY online_order DESC;
@@ -300,10 +219,7 @@ ORDER BY online_order DESC;
    ============================================================ */
 
 SELECT
-    CASE
-        WHEN online_order = 1 THEN 'Online Order Available'
-        ELSE 'Online Order Not Available'
-    END AS online_order_status,
+    CASE WHEN online_order = 1 THEN 'Online Order Available' ELSE 'Online Order Not Available' END AS online_order_status,
     COUNT(*) AS restaurant_count,
     ROUND(AVG(estimated_revenue), 0) AS avg_estimated_revenue,
     ROUND(AVG(contribution_margin), 2) AS avg_contribution_margin
@@ -316,23 +232,12 @@ ORDER BY online_order DESC;
    ============================================================ */
 
 SELECT
-    CASE
-        WHEN online_order = 1 THEN 'Online Order Available'
-        ELSE 'Online Order Not Available'
-    END AS online_order_status,
+    CASE WHEN online_order = 1 THEN 'Online Order Available' ELSE 'Online Order Not Available' END AS online_order_status,
     COUNT(*) AS restaurant_count,
     ROUND(SUM(estimated_revenue), 0) AS total_estimated_revenue,
     ROUND(SUM(contribution_margin), 2) AS total_contribution_margin,
-    ROUND(
-        SUM(estimated_revenue) * 100.0 /
-        SUM(SUM(estimated_revenue)) OVER (),
-        2
-    ) AS revenue_contribution_pct,
-    ROUND(
-        SUM(contribution_margin) * 100.0 /
-        SUM(SUM(contribution_margin)) OVER (),
-        2
-    ) AS contribution_margin_pct
+    ROUND(SUM(estimated_revenue) * 100.0 / SUM(SUM(estimated_revenue)) OVER (), 2) AS revenue_contribution_pct,
+    ROUND(SUM(contribution_margin) * 100.0 / SUM(SUM(contribution_margin)) OVER (), 2) AS contribution_margin_pct
 FROM zomato_unit_economics
 GROUP BY online_order
 ORDER BY total_estimated_revenue DESC;
@@ -361,9 +266,7 @@ SELECT
     city,
     restaurant_count,
     avg_estimated_revenue,
-    RANK() OVER (
-        ORDER BY avg_estimated_revenue DESC
-    ) AS revenue_rank
+    RANK() OVER (ORDER BY avg_estimated_revenue DESC) AS revenue_rank
 FROM (
     SELECT
         city,
@@ -380,22 +283,10 @@ ORDER BY revenue_rank;
    ============================================================ */
 
 SELECT
-    CASE
-        WHEN table_reservation = 'True'
-            THEN 'Table Reservation Available'
-        ELSE 'Table Reservation Not Available'
-    END AS table_reservation_status,
+    CASE WHEN table_reservation = 'True' THEN 'Table Reservation Available' ELSE 'Table Reservation Not Available' END AS table_reservation_status,
     COUNT(*) AS restaurant_count,
     ROUND(AVG(rating), 2) AS avg_rating,
-    ROUND(
-        AVG(
-            CASE
-                WHEN rating_count > 0
-                THEN rating_count
-            END
-        ),
-        0
-    ) AS avg_rating_count,
+    ROUND(AVG(CASE WHEN rating_count > 0 THEN rating_count END), 0) AS avg_rating_count,
     ROUND(AVG(estimated_revenue), 0) AS avg_estimated_revenue,
     ROUND(AVG(contribution_margin), 2) AS avg_contribution_margin
 FROM zomato_unit_economics
@@ -414,28 +305,43 @@ SELECT
         WHEN COST_FOR_TWO BETWEEN 1000 AND 1499 THEN '1000 - 1499'
         ELSE '1500+'
     END AS cost_band,
-
     COUNT(*) AS restaurant_count,
-
     ROUND(AVG(ESTIMATED_REVENUE), 0) AS avg_estimated_revenue,
-
     ROUND(AVG(CONTRIBUTION_MARGIN), 0) AS avg_contribution_margin,
-
     ROUND(AVG(RATING), 2) AS avg_rating
-
 FROM zomato_unit_economics
-
 WHERE COST_FOR_TWO IS NOT NULL
   AND COST_FOR_TWO > 0
+GROUP BY CASE
+    WHEN COST_FOR_TWO < 300 THEN 'Under 300'
+    WHEN COST_FOR_TWO BETWEEN 300 AND 599 THEN '300 - 599'
+    WHEN COST_FOR_TWO BETWEEN 600 AND 999 THEN '600 - 999'
+    WHEN COST_FOR_TWO BETWEEN 1000 AND 1499 THEN '1000 - 1499'
+    ELSE '1500+'
+END
+ORDER BY MIN(COST_FOR_TWO);
 
+/* ============================================================
+   20. Delivery-Only Restaurants vs Characteristics & Financial Performance
+   ============================================================ */
+
+SELECT
+    CASE
+        WHEN LOWER(TRIM(delivery_only)) = 'true'
+            THEN 'Delivery Only'
+        ELSE 'Not Delivery Only'
+    END AS delivery_only_status,
+    COUNT(*) AS restaurant_count,
+    ROUND(AVG(rating), 2) AS avg_rating,
+    ROUND(AVG(CASE WHEN rating_count > 0 THEN rating_count END), 0) AS avg_rating_count,
+    ROUND(AVG(COST_FOR_TWO), 0) AS avg_cost_for_two,
+    ROUND(AVG(ESTIMATED_REVENUE), 0) AS avg_estimated_revenue,
+    ROUND(AVG(CONTRIBUTION_MARGIN), 2) AS avg_contribution_margin
+FROM zomato_unit_economics
 GROUP BY
     CASE
-        WHEN COST_FOR_TWO < 300 THEN 'Under 300'
-        WHEN COST_FOR_TWO BETWEEN 300 AND 599 THEN '300 - 599'
-        WHEN COST_FOR_TWO BETWEEN 600 AND 999 THEN '600 - 999'
-        WHEN COST_FOR_TWO BETWEEN 1000 AND 1499 THEN '1000 - 1499'
-        ELSE '1500+'
+        WHEN LOWER(TRIM(delivery_only)) = 'true'
+            THEN 'Delivery Only'
+        ELSE 'Not Delivery Only'
     END
-
-ORDER BY
-    MIN(COST_FOR_TWO);
+ORDER BY restaurant_count DESC;
