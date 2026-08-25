@@ -54,7 +54,7 @@ A separate `zomato_unit_economics` table is used later for estimated operational
 
 A schema-validation lesson was captured during Q18: `zomato_restaurants_clean` uses `zomato_url` as its primary key and does not contain `restaurant_id`, while `zomato_unit_economics` contains `RESTAURANT_ID`. We therefore do not assume a join key without checking the actual schema.
 
-## 7. Exploratory SQL Q1–Q18
+## 7. Exploratory SQL Q1–Q19
 
 The exploratory analysis progressed from simple profiling to intermediate analyst-level SQL:
 
@@ -76,6 +76,7 @@ The exploratory analysis progressed from simple profiling to intermediate analys
 16. City-level financial performance
 17. City ranking by average estimated revenue
 18. Table reservation vs restaurant characteristics
+19. Restaurant cost vs estimated financial performance
 
 The full SQL is stored in `SQL/05_Exploratory_Analysis.sql`.
 
@@ -92,18 +93,45 @@ The queries introduced:
 - derived tables
 - window functions with `RANK()`
 - contribution/share-of-total calculations
+- business segmentation using cost bands
 
 The level is intentionally **intermediate/fresher interview level**, not advanced SQL.
 
-## 9. Important analytical caveats
+## 9. Q19 — Cost-band financial comparison
 
-The original restaurant dataset does not contain verified transaction-level revenue or customer-level behaviour. Q14–Q18 use estimated metrics from `zomato_unit_economics`.
+Q19 grouped restaurants into cost bands and compared restaurant count, average estimated revenue, average contribution margin and average rating.
+
+| Cost band | Restaurant count | Avg estimated revenue | Avg contribution margin | Avg rating |
+|---|---:|---:|---:|---:|
+| Under 300 | 76,739 | ₹2,678 | ₹1,211 | 3.39 |
+| 300 - 599 | 101,746 | ₹15,390 | ₹10,381 | 3.46 |
+| 600 - 999 | 29,529 | ₹66,170 | ₹50,496 | 3.57 |
+| 1000 - 1499 | 7,267 | ₹224,024 | ₹183,715 | 3.76 |
+| 1500+ | 5,591 | ₹593,412 | ₹506,202 | 3.95 |
+
+The query used 220,872 restaurants with positive/non-null cost values, about 98.38% of the 224,520-row financial dataset.
+
+**Useful finding:** The supplied results show a strong monotonic association: as the cost band increases, average estimated revenue, contribution margin and rating also increase. The `1500+` group has about 222× the average estimated revenue and about 418× the average contribution margin of the `Under 300` group.
+
+**Interpretation:** This indicates that higher-cost restaurants have a substantially different observed financial profile in this model. It does **not** prove that charging more causes higher revenue or margin; restaurant type, positioning, city, demand, scale and other factors may contribute.
+
+## 10. Important Q19 schema problem and resolution
+
+The first Q19 attempt failed because `cost_for_two_clean` belongs to `zomato_restaurants_clean`, while the query was written against `zomato_unit_economics`.
+
+The schema was checked and the query was corrected to use `COST_FOR_TWO`, the actual unit-economics field.
+
+This is a relevant project-learning point because it reinforces the rule: **verify the schema of the table being queried before assuming a column exists.**
+
+## 11. Important analytical caveats
+
+The original restaurant dataset does not contain verified transaction-level revenue or customer-level behaviour. Q14–Q19 use estimated metrics from `zomato_unit_economics`.
 
 Therefore the project should describe these as **estimated revenue/contribution-margin analysis**, not actual restaurant revenue or profit analysis.
 
 Several outputs also require careful label validation. For example, supplied Q14/Q15 result tables duplicated the `Online Order Not Available` label even though the restaurant counts correspond to the available and unavailable groups. This is documented as a data-output labeling issue rather than silently treated as a new business finding.
 
-## 10. Power BI status
+## 12. Power BI status
 
 The repository currently contains an earlier Power BI dashboard and screenshots, but these are **not considered the final project output**.
 
@@ -111,7 +139,7 @@ The Python EDA/validation work and SQL pipeline have since evolved. The Power BI
 
 This avoids building the final dashboard on an outdated analytical pipeline.
 
-## 11. Documentation approach
+## 13. Documentation approach
 
 GitHub is being used as the project's persistent working record, not only as a code repository.
 
@@ -128,14 +156,14 @@ Only useful/relevant information is documented:
 
 Routine conversation, repeated executions and irrelevant troubleshooting are intentionally not recorded.
 
-## 12. Current checkpoint
+## 14. Current checkpoint
 
-**Completed:** raw data → Python profiling → cleaning → EDA → validation → MySQL → exploratory SQL Q1–Q18 → results and learning documentation.
+**Completed:** raw data → Python profiling → cleaning → EDA → validation → MySQL → exploratory SQL Q1–Q19 → results and learning documentation.
 
 **Deferred intentionally:** final Power BI rebuild and replacement screenshots.
 
 **Not yet final:** public README and final portfolio presentation.
 
-## 13. Next stage
+## 15. Next stage
 
 Continue with useful intermediate-level SQL questions only when they add a distinct business insight or interview-relevant SQL concept. After the SQL analysis is finalized, rebuild Power BI from the reconciled pipeline, replace outdated screenshots, and then finalize the README/interview story.
