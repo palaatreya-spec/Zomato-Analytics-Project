@@ -88,28 +88,7 @@
 ### Q10 — Most Popular Cuisine Listings
 - **Status:** Completed and result recorded.
 
-| Cuisine listing | Restaurant count | % of restaurants |
-|---|---:|---:|
-| North Indian | 20,549 | 9.21% |
-| Fast Food | 11,462 | 5.14% |
-| North Indian, Chinese | 11,230 | 5.03% |
-| South Indian | 6,676 | 2.99% |
-| Bakery | 5,703 | 2.56% |
-| Chinese | 5,346 | 2.40% |
-| Street Food | 4,134 | 1.85% |
-| Bakery, Desserts | 3,297 | 1.48% |
-| Biryani | 2,791 | 1.25% |
-| Chinese, North Indian | 2,675 | 1.20% |
-| Pizza, Fast Food | 2,626 | 1.18% |
-| Bakery, Fast Food | 2,405 | 1.08% |
-| Desserts | 2,323 | 1.04% |
-| North Indian, Fast Food | 2,289 | 1.03% |
-| Mithai | 2,176 | 0.97% |
-| Cafe | 2,135 | 0.96% |
-| North Indian, Mughlai | 2,054 | 0.92% |
-| Beverages | 1,985 | 0.89% |
-| Fast Food, Beverages | 1,827 | 0.82% |
-| Ice Cream, Desserts | 1,603 | 0.72% |
+**Top listings:** North Indian 20,549 (9.21%); Fast Food 11,462 (5.14%); North Indian, Chinese 11,230 (5.03%); South Indian 6,676 (2.99%); Bakery 5,703 (2.56%); Chinese 5,346 (2.40%); Street Food 4,134 (1.85%); Bakery, Desserts 3,297 (1.48%); Biryani 2,791 (1.25%); Chinese, North Indian 2,675 (1.20%).
 
 **Key observation:** North Indian is the largest cuisine listing. This largely validates Q08 and will be treated as supporting analysis rather than a separate headline finding.
 
@@ -136,28 +115,28 @@
 
 ### Q13 — Online Ordering vs Restaurant Characteristics
 - **Status:** Completed and result recorded.
-- **Question:** How do restaurants with and without online ordering differ in rating, rating engagement, pricing and table-reservation adoption?
 
 | Online order status | Restaurant count | Avg rating | Avg rating count | Avg cost for two | Table reservation % |
 |---|---:|---:|---:|---:|---:|
 | Online Order Available | 111,310 | 3.55 | 173 | ₹421 | 3.48% |
 | Online Order Not Available | 113,210 | 3.39 | 115 | ₹430 | 2.43% |
 
-**Key observations:** Restaurants with online ordering have a higher average rating (**3.55 vs 3.39**) and substantially higher average rating count (**173 vs 115**), suggesting stronger observed customer engagement. Their average cost for two is slightly lower (**₹421 vs ₹430**), while table-reservation adoption is higher (**3.48% vs 2.43%**).
-
-**Interpretation caution:** These are group-level associations. They do not establish that online ordering causes higher ratings or engagement.
-
-**README-worthy:** Yes — strong supporting analysis for the online-ordering section.
+**Key observation:** Restaurants with online ordering have higher average rating (3.55 vs 3.39), higher rating engagement (173 vs 115), slightly lower average cost for two (₹421 vs ₹430), and higher table-reservation adoption (3.48% vs 2.43%). Association, not causation.
 
 ### Q14 — Online Ordering vs Financial Performance
 - **Status:** Completed and result recorded.
+- **Question:** Do restaurants with and without online ordering show different estimated financial performance?
+
+> **Data-quality note:** The supplied output labels both rows as `Online Order Not Available`. Because the restaurant counts exactly correspond to the Q11 online-order groups (111,310 and 113,210), the first row is recorded below as **Online Order Available** based on the established grouping. This should be verified against the original SQL output before the final README is published.
 
 | Online order status | Restaurant count | Avg estimated revenue | Avg contribution margin |
 |---|---:|---:|---:|
-| Online Order Not Available | 111,310 | ₹48,152 | ₹36,987.97 |
-| Online Order Available | 113,210 | ₹29,249 | ₹23,663.12 |
+| Online Order Available* | 111,310 | ₹48,152 | ₹36,987.47 |
+| Online Order Not Available | 113,210 | ₹29,249 | ₹23,663.12 |
 
-**Key observation:** Restaurants without online ordering show higher average estimated revenue and contribution margin in this dataset. This is an observed association, not evidence that online ordering causes lower revenue or margin.
+**Key observation (pending label verification):** The group represented by 111,310 restaurants has substantially higher average estimated revenue and contribution margin than the 113,210 group. The gap is approximately **₹18,903 in estimated revenue** and **₹13,324.35 in contribution margin** per restaurant.
+
+**Interpretation caution:** These are estimated financial metrics and group-level associations. They do not establish that online ordering causes higher or lower revenue/margins. Verify the first-row label in the SQL result before using this as a headline claim.
 
 ### Q15 — Revenue Contribution by Online Ordering
 - **Status:** Planned; run and record result before proceeding.
@@ -211,7 +190,7 @@ Only validated findings with actual recorded outputs should be promoted here.
 - Q11: Online ordering is almost evenly split: 49.58% available vs 50.42% unavailable.
 - Q12: Online-order adoption varies widely by city, from 72.93% in Jhansi to 15.73% in Goa.
 - Q13: Online-ordering restaurants have higher average ratings (3.55 vs 3.39), higher average rating counts (173 vs 115), slightly lower average cost for two (₹421 vs ₹430), and higher table-reservation adoption (3.48% vs 2.43%).
-- Q14: Online-ordering groups show materially different average estimated financial metrics; treat as an association, not causation.
+- Q14: The supplied financial result has a duplicated status label; the first row likely represents Online Order Available based on its 111,310 count. The label must be verified before promoting the finding to the README.
 
 ---
 
