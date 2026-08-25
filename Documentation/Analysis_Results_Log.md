@@ -8,8 +8,20 @@
 
 ## SQL Results
 
-### Q01 — Pending result record
-- **Status:** Result to be reconstructed from the completed SQL work.
+### Q01 — Overall Dataset Coverage
+- **Status:** Completed and result recorded.
+- **Question:** What is the overall scale and coverage of the restaurant dataset?
+
+| Metric | Result |
+|---|---:|
+| Total restaurants | 224,520 |
+| Total cities | 83 |
+| Total areas | 2,500 |
+| Total cuisines | 19,675 |
+
+**Key observation:** The dataset contains 224,520 restaurant records across 83 cities, 2,500 areas and 19,675 cuisine values.
+
+**README-worthy:** Potentially, as a dataset overview statistic.
 
 ### Q02 — Pending result record
 - **Status:** Result to be reconstructed from the completed SQL work.
@@ -105,6 +117,7 @@
 
 Only validated findings with actual recorded outputs should be promoted here.
 
+- Q01: Dataset contains 224,520 restaurants across 83 cities, 2,500 areas and 19,675 cuisine values.
 - Q14: Online-ordering groups show materially different average estimated financial metrics in the current analysis. Treat as an association, not causation.
 
 ---
