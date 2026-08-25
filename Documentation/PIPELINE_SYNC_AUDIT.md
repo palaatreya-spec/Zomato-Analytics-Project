@@ -2,7 +2,7 @@
 
 **Audit scope:** Raw data → Python → SQL → Unit Economics → Power BI → Documentation/README
 
-**Status:** Audit checkpoint — no analytical logic changed.
+**Status:** Active synchronization checkpoint. Analytical logic is not changed by this audit.
 
 ## 1. What is currently present
 
@@ -11,7 +11,7 @@
 - SQL pipeline: table setup, data-quality checks, restaurant analysis, KPI analysis, and exploratory analysis through Q18.
 - Separate source-backend SQL setup/analysis files.
 - Unit-economics table and analysis are represented in the current workflow.
-- Power BI `.pbix` and supporting model documentation.
+- Power BI `.pbix` and supporting model documentation from an earlier dashboard version.
 - Documentation covering source profile, cleaning principles, data dictionary, business questions, EDA findings, KPI definitions, assumptions/limitations, reconciliation rules, SQL execution/learning notes, project journey, architecture, and interview story.
 
 ## 2. Synchronization issues to resolve
@@ -26,7 +26,7 @@ These should eventually be consolidated into one canonical results log to avoid 
 
 ### B. Q1–Q18 cross-check
 
-The exploratory SQL file is present, but the final results/documentation should be checked against the latest confirmed Q1–Q18 outputs before adding Q19+. In particular, the latest outputs include online-order analysis, financial contribution, city revenue ranking, and table-reservation analysis.
+The exploratory SQL file is present through Q18. The latest confirmed user-provided outputs should remain the source of truth for the results log. In particular, Q11–Q18 include online-order analysis, estimated financial contribution, city revenue ranking, and table-reservation analysis.
 
 ### C. Naming/terminology consistency
 
@@ -34,19 +34,23 @@ Check that `online_order_status`, `table_reservation_status`, estimated revenue,
 
 ### D. Result correctness issue to preserve and investigate
 
-Some supplied result tables contained a duplicated/mislabeled status label (for example, both rows were displayed as `Online Order Not Available`). The underlying counts clearly distinguish two groups. Documentation should use the actual intended labels only after the SQL output is verified.
+Some supplied result tables contained a duplicated/mislabeled status label (for example, both rows were displayed as `Online Order Not Available`). The underlying counts clearly distinguish two groups. Documentation records the intended labels using the validated counts, but the original SQL/output should be checked before final publication.
 
 ### E. Unit-economics assumptions
 
 The unit-economics analysis uses estimated orders/revenue and contribution margin derived from assumptions/model logic rather than observed transaction-level sales. This must remain explicit in the assumptions/limitations and interview explanation.
 
-### F. Power BI synchronization
+### F. Power BI — intentionally deferred
 
-The `.pbix` exists, but the final dashboard/model should be checked against the current SQL result definitions after Q18. Do not claim the dashboard is final until this reconciliation is complete.
+The current `.pbix` and screenshots are **old working artifacts** and should not be treated as the current analytical output. Python EDA, validation and SQL analysis have since been updated.
+
+**Do not spend time reconciling or polishing the current Power BI dashboard yet.** After the SQL analysis is complete and the final SQL findings are validated, the Power BI model, measures, visuals and screenshots will be rebuilt/updated against the finalized pipeline.
+
+Therefore Power BI is **not considered a current pipeline failure**; it is an intentionally deferred stage.
 
 ### G. README synchronization
 
-README should be treated as the final public-facing summary, not the working analysis log. It should be updated only after the SQL, Python, documentation, and Power BI layers are reconciled.
+README should be treated as the final public-facing summary, not the working analysis log. It should be updated only after the SQL/Python layers are reconciled and the Power BI dashboard has been rebuilt from the finalized analysis.
 
 ## 3. Current pipeline map
 
@@ -71,19 +75,28 @@ SQL Exploratory Analysis Q1–Q18
   ↓
 Unit Economics
   ↓
-Power BI
+[Power BI rebuild — deferred until SQL is finalized]
   ↓
 Final Insights / README
 ```
 
-## 4. Next synchronization order
+## 4. Current project checkpoint
 
-1. Reconcile the canonical Q1–Q18 SQL outputs with the results documentation.
-2. Remove/merge duplicate result-log documentation.
-3. Reconcile KPI definitions and assumptions with the actual SQL formulas.
-4. Check Python outputs against the cleaned-table definitions used by SQL.
-5. Check Power BI model/measures against the reconciled definitions.
-6. Update README only after the above checks.
-7. Then continue with Q19.
+**Completed:** raw data → Python profiling → cleaning → EDA → validation → MySQL → SQL exploratory analysis Q1–Q18 → results/learning documentation.
+
+**Deferred intentionally:** final Power BI rebuild and screenshots.
+
+**Not yet final:** public README and final portfolio presentation.
+
+## 5. Next synchronization order
+
+1. Continue/complete useful intermediate-level SQL analysis.
+2. Reconcile the canonical Q1–Q18+ SQL outputs with the results documentation.
+3. Consolidate duplicate result-log documentation.
+4. Reconcile KPI definitions and assumptions with the actual SQL formulas.
+5. Check Python outputs against the cleaned-table definitions used by SQL.
+6. Rebuild Power BI from the finalized SQL/Python pipeline.
+7. Replace old screenshots with final dashboard screenshots.
+8. Update README and interview story using only finalized findings.
 
 **Important:** This audit intentionally records gaps and synchronization work. It does not invent missing results or silently change analytical methodology.
