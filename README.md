@@ -12,6 +12,8 @@
 >
 > Power BI and final presentation are intentionally pending because the existing dashboard/screenshots are from an earlier version of the pipeline and will be rebuilt after the SQL stage.
 
+**Latest update — 28 Aug 2026:** Power BI rebuild is now underway using the finalized SQL analysis and validated pipeline.
+
 ---
 
 ## 📌 Project Overview
