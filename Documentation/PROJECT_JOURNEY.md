@@ -2,7 +2,7 @@
 
 ## Purpose
 
-A concise record of the important project-building decisions from raw data through the current SQL analysis. This is intentionally limited to steps that are useful for reproducibility, future learning and interview explanation.
+A concise record of the important project-building decisions from raw data through the current Power BI stage. This is intentionally limited to steps that are useful for reproducibility, future learning and interview explanation.
 
 ## 1. Raw data
 
@@ -54,7 +54,7 @@ A separate `zomato_unit_economics` table is used later for estimated operational
 
 A schema-validation lesson was captured during Q18: `zomato_restaurants_clean` uses `zomato_url` as its primary key and does not contain `restaurant_id`, while `zomato_unit_economics` contains `RESTAURANT_ID`. We therefore do not assume a join key without checking the actual schema.
 
-## 7. Exploratory SQL Q1–Q19
+## 7. Exploratory SQL Q1–Q20
 
 The exploratory analysis progressed from simple profiling to intermediate analyst-level SQL:
 
@@ -77,6 +77,7 @@ The exploratory analysis progressed from simple profiling to intermediate analys
 17. City ranking by average estimated revenue
 18. Table reservation vs restaurant characteristics
 19. Restaurant cost vs estimated financial performance
+20. Delivery-only restaurants vs characteristics and estimated financial performance
 
 The full SQL is stored in `SQL/05_Exploratory_Analysis.sql`.
 
@@ -125,19 +126,51 @@ This is a relevant project-learning point because it reinforces the rule: **veri
 
 ## 11. Important analytical caveats
 
-The original restaurant dataset does not contain verified transaction-level revenue or customer-level behaviour. Q14–Q19 use estimated metrics from `zomato_unit_economics`.
+The original restaurant dataset does not contain verified transaction-level revenue or customer-level behaviour. Q14–Q20 use estimated metrics from `zomato_unit_economics` where applicable.
 
 Therefore the project should describe these as **estimated revenue/contribution-margin analysis**, not actual restaurant revenue or profit analysis.
 
 Several outputs also require careful label validation. For example, supplied Q14/Q15 result tables duplicated the `Online Order Not Available` label even though the restaurant counts correspond to the available and unavailable groups. This is documented as a data-output labeling issue rather than silently treated as a new business finding.
 
-## 12. Power BI status
+## 12. Power BI — Data loading and transformation
 
-The repository currently contains an earlier Power BI dashboard and screenshots, but these are **not considered the final project output**.
+The validated analytical dataset was loaded into Power BI after Power Query transformation.
 
-The Python EDA/validation work and SQL pipeline have since evolved. The Power BI model, measures, visuals and screenshots will be corrected/rebuilt **after the SQL analysis is complete and the final findings are validated**.
+The current model-ready table is `zomato_restaurants_clean` with **16 columns**.
 
-This avoids building the final dashboard on an outdated analytical pipeline.
+The 16 columns are:
+
+- `area`
+- `city`
+- `coordinate_valid`
+- `cost_for_two_clean`
+- `cuisine`
+- `delivery_only`
+- `has_cost`
+- `has_rating`
+- `latitude`
+- `longitude`
+- `name`
+- `online_order`
+- `rating_clean`
+- `rating_count`
+- `table_reservation`
+- `zomato_url`
+
+### Power BI data-type validation
+
+The loaded/transformed dataset was checked before proceeding to the modelling stage.
+
+Confirmed types:
+
+- Text: `area`, `city`, `cuisine`, `name`, `online_order`, `zomato_url`
+- Whole number: `coordinate_valid`, `delivery_only`, `has_cost`, `has_rating`, `rating_count`, `table_reservation`
+- Decimal number: `rating_clean`, `latitude`, `longitude`
+- Whole number: `cost_for_two_clean`
+
+All 16 columns have been reviewed and the current types are appropriate for the planned analysis.
+
+**Checkpoint completed:** Power BI data loading, transformation and data-type validation.
 
 ## 13. Documentation approach
 
@@ -153,17 +186,18 @@ Only useful/relevant information is documented:
 - assumptions and limitations
 - interview explanations
 - deferred work and next steps
+- Power BI modelling and validation checkpoints
 
 Routine conversation, repeated executions and irrelevant troubleshooting are intentionally not recorded.
 
 ## 14. Current checkpoint
 
-**Completed:** raw data → Python profiling → cleaning → EDA → validation → MySQL → exploratory SQL Q1–Q19 → results and learning documentation.
+**Completed:** raw data → Python profiling → cleaning → EDA → validation → MySQL → exploratory SQL Q1–Q20 → results and learning documentation → Power BI data loading/transformation → 16-column data-type validation.
 
-**Deferred intentionally:** final Power BI rebuild and replacement screenshots.
+**Current stage:** Power BI modelling and measure development.
 
-**Not yet final:** public README and final portfolio presentation.
+**Not yet final:** Power BI dashboard visuals, final screenshots, public README and final portfolio presentation.
 
 ## 15. Next stage
 
-Continue with useful intermediate-level SQL questions only when they add a distinct business insight or interview-relevant SQL concept. After the SQL analysis is finalized, rebuild Power BI from the reconciled pipeline, replace outdated screenshots, and then finalize the README/interview story.
+Proceed with the Power BI model structure and core DAX measures using the validated 16-column dataset. Build and validate the dashboard progressively, documenting each meaningful modelling, measure and visual checkpoint before moving to the next stage.
